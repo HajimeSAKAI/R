@@ -41,12 +41,16 @@ library(ggthemes) ##色覚多様性に配慮したカラーパレットの適用
 library(ggplotgui)  ##ggplot_shiny()でデータフレームを指定してマウス操作で可視化できる
 library(ggpubr) ##適当に調べて...（僕自身も理解してない）(cfパッケージ. gridExtra,cowplot)
 
+library(gapminder)  ##折れ線グラフ作成
+
 #library(dplyr  ##データ整形に関するパッケージ
 #library(tidyr  ##tidy dataを作成する際に活用するパッケージ（Rにとって扱いやすくするため　）
 #library(rvest)  ##スクレイピングに関するパッケージ（別途読む込み必要）
 library(RSelenium)  ##スクレイピングに関するパッケージ（別途調べて...）
 
 library(rtweet) ##twitterAPIに関するパッケージ
+
+library(jtool)  ##重回帰分析の結果を視覚的に表示する
 
 library(readxl) #Excelファイルの読み込み
 #read_excel(xlsx/data.xlsx, sheet=1)
@@ -62,5 +66,6 @@ library(data.table) ##tidyverseに含まれていないけれど読み込みに�
 library(tidyverse)  #パッケージを集約したパッケージ
 library(RColorBrewer) ##可視化の際に豊富な色を使用するためのパッケージ
 
+library(jtool)  ##重回帰分析の結果を視覚的に表示する
 
 #Rコマンダーっていうパッケージもおすすめ（名前忘れた...）
