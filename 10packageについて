@@ -1,6 +1,10 @@
 library() #インストール済みのパッケージの表示
 search()  #読み込み済みのパッケージの表示
 
+#一括でインストールしたい場合は、以下の変換をすると簡単
+#「library(」を「install.packages("」
+#「)」を「")」
+
 library(MASS) #多変量データ解析に使う
 library(boot) #Bootstrap関数
 library(class)  #分類関数
@@ -22,3 +26,41 @@ library(stats4) #S4クラスに使用される統計的関数
 library(survival) #生存分析
 library(tcltk)  #Tcl/Tkインタフェース
 library(tools)  #パッケージ開発ツール
+
+library(tidyverse)  #パッケージを集約したパッケージ
+#library(readr)  ##読み込みに関するパッケージ
+library(data.table) ##tidyverseに含まれていないけれど読み込みに強いパッケージ
+
+#library(ggplot2) ##可視化に関するパッケージ
+
+##可視化の視覚変更
+library(RColorBrewer) ##可視化の際に豊富な色を使用するためのパッケージ
+library(viridis)  ##Pythonのmatplotlibライブラリと同じ色空間を使用可能にする
+library(ggthemes) ##色覚多様性に配慮したカラーパレットの適用
+##GUIベースで可視化
+library(ggplotgui)  ##ggplot_shiny()でデータフレームを指定してマウス操作で可視化できる
+library(ggpubr) ##適当に調べて...（僕自身も理解してない）(cfパッケージ. gridExtra,cowplot)
+
+#library(dplyr  ##データ整形に関するパッケージ
+#library(tidyr  ##tidy dataを作成する際に活用するパッケージ（Rにとって扱いやすくするため　）
+#library(rvest)  ##スクレイピングに関するパッケージ（別途読む込み必要）
+library(RSelenium)  ##スクレイピングに関するパッケージ（別途調べて...）
+
+library(rtweet) ##twitterAPIに関するパッケージ
+
+library(readxl) #Excelファイルの読み込み
+#read_excel(xlsx/data.xlsx, sheet=1)
+library(haven)  #SAS,SPSS,STATAファイルの読み込み
+#read_sas
+#read_sav ##SPSS
+#read_dta ##STATA
+
+library(stargazer)  #記述統計の表の作成ができるパッケージ
+
+#おすすめ関数
+library(data.table) ##tidyverseに含まれていないけれど読み込みに強いパッケージ
+library(tidyverse)  #パッケージを集約したパッケージ
+library(RColorBrewer) ##可視化の際に豊富な色を使用するためのパッケージ
+
+
+#Rコマンダーっていうパッケージもおすすめ（名前忘れた...）
