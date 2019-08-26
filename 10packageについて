@@ -1,0 +1,24 @@
+library() #インストール済みのパッケージの表示
+search()  #読み込み済みのパッケージの表示
+
+library(MASS) #多変量データ解析に使う
+library(boot) #Bootstrap関数
+library(class)  #分類関数
+library(cluster)  #クラスター分析
+library(codetools)  #Rコードの分析ツール
+library(compiler) #自作関数などをコンパイルするインタフェース
+library(parallel) #並列計算処理をサポート
+library(foreign)  #Minitab,S,SAS,SPSS,Stana,Systat,dBaseなどの読み込み
+library(grid) #Gridグラフィクス
+library(kernSmooth) #カーネルスムージング関数
+library(lattice)  #グラフィックス格子
+library(mgcv) #GAMs with GCV（平滑化の推定など）
+library(nlme) #混合効果モデル
+library(rcompgen) #コマンドライン完成ジェネレーター
+library(rpart)  #帰納的な分割（決定木）
+library(spatial)  #クリギングと点配置解析関数
+library(splines)  #回帰スプライン関数と関数
+library(stats4) #S4クラスに使用される統計的関数
+library(survival) #生存分析
+library(tcltk)  #Tcl/Tkインタフェース
+library(tools)  #パッケージ開発ツール
