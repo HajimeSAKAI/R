@@ -1,0 +1,6 @@
+  #パイプ関数等を使ってデータの整形をする（扱いやすくするため）
+  
+  data %>%
+  select(Rent, Area, Year, Structure, Walk, Parking)
+  filter(Rent >= 50000, Area <= 50) #50000円以下、50m2以下（単身世帯を想定）
+  
