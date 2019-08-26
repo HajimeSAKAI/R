@@ -1,0 +1,55 @@
+#主成分分析の目的は、できるだけ少ない主成分に、もとの変数の情報を吸収すること
+
+library(psych)  ##心理学で用いられる統計処理方法のパッケージ
+
+#データオブジェクトを作成
+temp<-c( 50, 57, 74, 94, 112, 128, 140, 147, 150, 147, 140, 128, 112, 94, 74, 57, 57, 50, 57, 74, 94, 112, 128, 140, 147, 150, 147, 140, 128, 112, 94, 74, 74, 57, 50, 57, 74, 94, 112, 128, 140, 147, 150, 147, 140, 128, 112, 94, 94, 74, 57, 50, 57, 74, 94, 112, 128, 140, 147, 150, 147, 140, 128, 112, 112, 94, 74, 57, 50, 57, 74, 94, 112, 128, 140, 147, 150, 147, 140, 128) 
+okamoto<-matrix(temp, 16,5, byrow=F) 
+colnames(okamoto)<-c("A", "B", "C", "D", "E") 
+
+#主要因分析の関数"prcomp"
+oka.pc<-prcomp(okamoto) 
+summary(oka.pc) 
+
+#第k番目の主成分までに、もとの変数の情報がどれだけ吸収できたか問題。そのために、寄与率と累積寄与率に関する情報が必要
+#Proportion of Varianceは、寄与率
+#Cumulative Proportion は、累積寄与率
+oka.pc$rotation 
+plot(oka.pc$rotation[,1],oka.pc$rotation[,2],type="n") 
+text(oka.pc$rotation[,1],oka.pc$rotation[,2],colnames(okamoto)) 
+
+#主成分が、線形結合式の合成変数を求める係数
+oka.pc$x 
+#合成変数で縮約した主成分得点で再現するため、第2主成分までの主成分得点の散布図を作成
+plot(oka.pc$x[,1],oka.pc$x[,2],type="n") 
+text(oka.pc$x[,1],oka.pc$x[,2],1:16) 
+
+#関数prcompを用いた主成分分析では、関数predictを用いて、作成した合成変数に、新しいデータを当てることが出来る
+oka.pc1<-prcomp(okamoto[1:10,])   #丘本の円周データの個体1～10
+oka.pc2<-predict(oka.pc1,okamoto[11:16,])   #残りの11～16の個体
+plot(oka.pc1$x[,1],oka.pc1$x[,2],type="n") 
+text(oka.pc1$x[,1],oka.pc1$x[,2],1:10) 
+plot(oka.pc2[,1],oka.pc2[,2],type="n") 
+text(oka.pc2[,1],oka.pc2[,2],11:16) 
+
+#関数prcompの結果については、主成分と主成分得点を同一の画面上で散布図を作成する biplot 関数
+biplot(oka.pc) 
+
+#irisを使用してバイプロット（ggplot2を使用)
+install.packages("devtools")
+library(devtools) #install_githubを含んだパッケージ
+install_github("ggbiplot", "vqv")
+library(ggbiplot)
+res <- prcomp(iris[-5],scale=T) #主成分分析
+ggbiplot(res, obs.scale=1, var.scale=1, groups=iris[,5], ellipse=TRUE, circle=TRUE)
+
+install.packages("FactorMineR")
+library(FactorMineR)
+PCA(okamoto,scale.unit=FALSE) #PCA関数で作図、変数のスコア(variables)、個体のスコア(indivisuals)
+
+#パッケージamap：pca
+#パッケージade4：dudi.pca, s.class,s.arrow,s.corcircle
+#パッケージe1071：ica(独立成分分析＝信号処理における信号分離の分野)
+
+#パッケージkernlab：kpca（カーネル主要因分析＝非線形主成分分析）
+#カーネル法は、サポートベクターマシンと強い関係
