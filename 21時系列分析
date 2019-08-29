@@ -1,0 +1,205 @@
+#時系列分析
+
+##時間とともに変化するデータ分析について
+##ARモデル、ARMA、ARIMAモデル、ARFIMAモデル、GARCHモデル、
+##成分分解、多変量時系列、カオス時系列などを扱う
+
+class(lh)	#「ts」と返す
+
+start(UKgas)
+end(UKgas)
+frequency(UKgas)
+
+window(UKgas,c(1975,2),c(1979,3))	#window関数で時系列の一部を切り出せる
+
+
+###時系列データ
+op<-par(mfrow=c(2,1),mar=c(4,5,4,1,1))
+ts.plot(lh)
+ts.plot(UKgas);par(op)
+
+ts.plot(ldeaths,mdeaths,fdeathsg,pars=list(xlab="年",ylab="死亡数",
+lty=c(1:3),col=c(1:3))
+legend(1977,4000,c("全体","男性","女性"),lty=c(1:3),col=c(1:3))
+
+###データオブジェクトの作成
+temp(ts(1:120,start=c(1995,6),frequency=12)
+class(temp)
+
+###ラグ処理（時間の遅れのこと、前後の時刻データと比較するため）
+ldeaths
+lag(ldeaths,k=5)
+####時系列データの併合（ts.union、ts.intersect）
+
+
+###差分
+plot(diff(UKgas))
+plot(diff(UKgas,lag=1))	#上の式と同じ
+####cf.(diff(UKgas,lag=2)=UKgas-lag(UKgas,k=-1))
+
+
+###自己共分散と自己相関（偏自己共分散・相関は、関数pacf）
+acf(UKgas)	#関acfの書式：acf(x,type=c("correlation","covatiance","partial",plot=TRUE, ... )
+
+op<-par(mai=rep(0,25,4),mfrow=c(4,1))
+for(i in 1:4)plot(diff(log(UKgas),lag=i))
+par(op)	#デフォルトの状態に戻す
+
+ccd(mdeaths,fdeaths)
+
+
+#スペクトル分析（いくつかの成分が混合していることを想定する）
+##トレンド、周期的に変動する成分、ノイズなどが含まれる。
+##時系列解析では、周期成分の有無、各成分の強さなどを分析する場合がある。
+###パッケージstatsを用いてピリオドグラムを用いて、スペクトル密度関数を推定する
+library(stats)
+op<- par(mfrow=c(2,2),mar=c(5,4,4,2))
+spec.pgram(UKgas)
+spec.pgram(UKgas,spans=c(3,3))
+spec.pgram(ldeaths)
+spec.pgram(ldeaths,spans=c(3,3));par(op)
+
+op<- par(mfrow=c(1,2))
+spectrum(UKgas,method="ar")
+spectrum(ldeaths,method="ar");par(op)
+
+
+#ランダムウォークと単位根
+##時系列解析は、回帰分析と同様にモデルを作成し、
+##将来の予測やシステムの制御などを行うことが、主な目的
+PP.test(lh)	#library(stats)、p値を見て単位根の有無を検定
+
+install.packages("tseries")
+library(tseries)#パッケージfSeriesには、adfTest()やunitrootTest()等がある
+adf.test(UKgas)	#パッケージtseriesより、ディッキ―フラーの単位根検定関数
+
+adf.test(diff(UKgas))$p.value	#非定常データの場合、対数や差分を取って定常化（1次微分の場合）
+
+
+#ARモデル（自己回帰モデル）
+##関数ARとモデルの推定
+(lh.ar<-ar(lh))	#関数ar(x,aic=TRUE,method="",order.max=NULL, ...)
+summary(lh.ar)
+lh.ar$order
+round(lfh.ar$ar,3)
+
+##モデルの診断
+Box.test(lh.ar$res, type="Ljung")	#リュング・ボックス検定
+
+temp<-window(lh.ar$res,start=4)
+jarque.bera.test(temp)	#時系列データの正規性を検定する関数、欠損値を含んでいるとエラーメッセージ
+			#関数arが返す残差の中の先頭のp個(モデルの次数)は欠損値である
+##予測
+
+#自己回帰モデル関数arで求めたモデルによる予測値は、関数predictを用いて求めれる
+(lh.pr<-predict(lh.ar,n.ahead=10))	#引数n.aheadには予測の期間、予測値$pred、標準残差$se
+
+SE1<-lh.pr$pred+2*lh.pr$se
+SE2<-lh.pr$pred-2*lh.pr$se
+ts.plot(lh,lh.pr$pred,SE1,SE2,gpars=list(lt=c(1,2,3,3),col=c(1,2,4,4)))
+legend(locator(1),c("実測値","予測値","2*SE"), lty=c(1,2,3),col=c(1,2,4))	#10期の自己回帰予測値および2倍の標準残差のプロットを作成する例
+
+
+#ARMA（自己回帰移動平均）モデル		##
+#ARIMA（自己回帰和分移動平均）モデル	##Box-Jekins法
+##arima(x,order=c(0,0,0), ...)	#単変量時系列データ（library(stats)）
+
+(lh.ari<-arima(lh,order = c(2,0,1)))	#orderは、自己回帰の次数、差分の階数、過去の残差の移動平均の次数
+summary(lh.ari)
+
+###モデル評価に関連する情報
+###残差の分散sigma2、対数尤度$loglik、AIC情報量規準$aic、残差$residuals、等がある
+
+###最も基本的な問題は、orderのp、d、qを幾らにするか
+###ある範囲内のp、d、qのすべての組み合わせの中から、
+###情報量規準(AICやBICなど)値が最も小さい組み合わせを用いる方法
+
+#pは1から4まで、dは0から1まで、qは0から4までのすべての組み合わせで最適なp、d、qを求める簡単なプログラム
+data<-lh; T<-0
+
+for(p in 1:4) 
+for(d in 0:1)
+for(q in 0:4){
+fit<-arima(data,order=c(p,d,q))
+T<-T+1
+if(T==1){
+minaic<-fit$aic
+orderP<-p; orderD<-d;orderQ<-q;
+}else{
+if (fit$aic<-minaic){
+minaic<- fit$aic;
+orderP<-p; orderD<-d;orderQ<-q;
+}
+}
+}
+
+cat("結果：p=",orderP,"d=",orderD,"q=",orderQ,"AIC=",minaic,"\n");
+(fit<-arima(lh,order = c(3,0,0)))	#上記の結果からp,d,qを決定する
+
+tsdiag(fit,gof.lag=12)	#関数tsdiag：ARIMAモデルを診断(残差分析)するツール
+
+
+
+#ARFIMA（自己回帰実数和分移動平均 ）モデル	#library(fracdiff)専用パッケージ
+
+##fracdiff(x, nar = 0,dtol = NULL,nma = 0, ...)	#xは時系列データ、narは自己回帰の次数p、dtolは差分の階数d、nmaは移動平均の次数q
+
+library(fracdiff)
+(AP.d<-fdGPH(AirPassengers)$d)	#データAirPassengersを用いて、差分階数を推定
+AP.fra<-fracdiff(AirPassengers,nar=3, dtol= AP.d,nma=1)
+summary(AP.fra)	#最大対数尤度は$log.likelihood、自己回帰係数は$ar、移動平均係数は$ma
+
+
+
+#G(Generalized)ARCH(自己回帰条件付き分散不均一)モデル	#tseries(関数garch)、fSeries(関数garchFit)に関数がある
+
+条件付き分散の非対称性を表す、TGARCH(Threshold G ARCH) 
+GARCHモデルとTGARCHモデルを統合した、APARCH(Asymmetric Power ARCH) 
+
+library(fGarch)
+UKg.d<-diff(UKgas)
+UKg.m <-garchFit(formula= ~ arma(1,1) + garch(1,1), data = UKg.d, trace=F)
+summary(UKg.m)
+
+UKg.m@fit$ics
+plot(UKg.m)
+
+UKg.fit <-ts(UKg.m@fitted, start=c(1960,2),frequency=4)
+ts.plot(UKg.d, UKg.fit,lty=c(1,2),　col=c(1,2))
+legend(locator(1),c("差分値","予測値"), lty=c(1,2),col=c(1,2))
+
+
+
+#成分の分解
+
+##観測値＝トレンド＋周期変動＋残差
+plot (stl (UKgas, s.window ="per"))
+
+
+
+#多変量時系列	#ベクトル自己回帰(VAR:VectorAutoRegressive)モデル
+
+library(tseries);data(USeconomic)
+USe.d<-diff(USeconomic[,1:2])
+ts.plot(USe.d,lty=c(1,2),col=c(1,2))
+legend(locator(1),c(colnames(USe.d)[1],　colnames(USe.d)[2]),lty=c(1,2),col=c(1,2))
+
+acf(USe.d, na.action=na.pass)
+ccf(USe.d[,1],USe.d[,2],main="d.log(M1) & d.log(GNP)")
+(USe.ar<-ar(USe.d,order.max=2,aic=F))
+plot(USe.ar$res)
+USe.f<-predict(USe.ar,n.ahead=12,se.fit=F)
+
+
+
+#カオス時系列	#不規則に変動する時系列データを非線形的に解析する手法（カオス理論に基づいた方法）
+	
+##多次元状態空間に埋め込む(embedding)方法
+##リカレンスプロット(recurrence plots)法
+
+library(tseriesChaos)
+library(scatterplot3d)
+ro.em<-embedd(rossler.ts,m=3,d=8)
+scatterplot3d(ro.em,type="l",color=4)
+
+recurr(lorenz.ts, m=3, d=0, start.time=10, end.time=15)
