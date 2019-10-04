@@ -2,3 +2,5 @@ library(tidyverse)
 
 a <- read_tsv("")
 
+read_tsv
+read.table
