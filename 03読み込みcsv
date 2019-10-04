@@ -1,0 +1,10 @@
+#エンコーディングの確認
+guess_encoding(".csv")
+
+#読み込み時にメモリ不足しないように注意
+#不足するとSSDの論理障害の発生の危険性(実際になって、修論データが飛んだ！)
+
+data0110<-read.csv("190107.csv,header=T)  #普通の読み込み
+data0110<-read_csv("190107.csv,header=T)  #tidyverseを使用した読み込み（少し速い）
+
+
