@@ -43,15 +43,20 @@ library(ggpubr) ##適当に調べて...（僕自身も理解してない）(cf�
 
 library(gapminder)  ##折れ線グラフ作成
 library(psych)  ##心理学で用いられる統計処理方法のパッケージ
-#library(dplyr  ##データ整形に関するパッケージ
-#library(tidyr  ##tidy dataを作成する際に活用するパッケージ（Rにとって扱いやすくするため　）
-#library(rvest)  ##スクレイピングに関するパッケージ（別途読む込み必要）
-library(RSelenium)  ##スクレイピングに関するパッケージ（別途調べて...）
+library(dplyr)  ##データ整形に関するパッケージ
+library(tidyr)  ##tidy dataを作成する際に活用するパッケージ（Rにとって扱いやすくするため　）
 
-library(rtweet) ##twitterAPIに関するパッケージ
+#ネットワークに関するパッケージ
+library(rvest)      ##スクレイピングに関するパッケージ（別途読む込み必要）
+library(RSelenium)  ##スクレイピングに関するパッケージ（別途調べて...）
+library(rtweet)     ##twitterAPIに関するパッケージ
+
+
 
 library(jtool)  ##重回帰分析の結果を視覚的に表示する
 
+
+#データの読み込みに関するパッケージ
 library(readxl) #Excelファイルの読み込み
 #read_excel(xlsx/data.xlsx, sheet=1)
 library(haven)  #SAS,SPSS,STATAファイルの読み込み
