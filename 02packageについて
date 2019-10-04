@@ -5,11 +5,7 @@ search()  #読み込み済みのパッケージの表示
 #「library(」を「install.packages("」
 #「)」を「")」
 
-library(MASS) #多変量データ解析に使う
-library(boot) #Bootstrap関数
-library(class)  #分類関数
-library(cluster)  #クラスター分析
-library(codetools)  #Rコードの分析ツール
+
 library(compiler) #自作関数などをコンパイルするインタフェース
 library(parallel) #並列計算処理をサポート
 library(foreign)  #Minitab,S,SAS,SPSS,Stana,Systat,dBaseなどの読み込み
@@ -52,9 +48,16 @@ library(RSelenium)  ##スクレイピングに関するパッケージ（別途�
 library(rtweet)     ##twitterAPIに関するパッケージ
 
 
+#回帰等の分析に関するパッケージ
 
+library(corrplot) #多変数の関係の結果をグラフ化
+library(coefplot) #相関係数の結果をグラフ化
 library(jtool)  ##重回帰分析の結果を視覚的に表示する
-
+library(MASS) #多変量データ解析に使う
+library(boot) #Bootstrap関数
+library(class)  #分類関数
+library(cluster)  #クラスター分析
+library(codetools)  #Rコードの分析ツール
 
 #データの読み込みに関するパッケージ
 library(readxl) #Excelファイルの読み込み
@@ -72,8 +75,6 @@ library(devtools) #install_githubを含んだパッケージ
 library(data.table) ##tidyverseに含まれていないけれど読み込みに強いパッケージ
 library(tidyverse)  #パッケージを集約したパッケージ
 library(RColorBrewer) ##可視化の際に豊富な色を使用するためのパッケージ
-
-library(jtool)  ##重回帰分析の結果を視覚的に表示する
 
 library(devtools) #install_githubを含んだパッケージ
 
