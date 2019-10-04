@@ -2,8 +2,6 @@
 #Rstudioをインストールする
   #Rをインストールしないと悪い状況になるので注意
 
-
-
 install.package("tidyverse")
 library(tidyverse)
 
@@ -11,8 +9,8 @@ library(tidyverse)
 guess_encoding(".tsv")
 
 #読み込み時にメモリ不足しないように注意（不足するとSSDの論理障害の発生の危険性）
-data0110<-read_csv("190107.csv,header=T)  #普通の読み込み
-data0110<-read.csv("190107.csv,header=T)  #tidyverseを使用した読み込み（少し速い）
+data0110<-read.csv("190107.csv,header=T)  #普通の読み込み
+data0110<-read_csv("190107.csv,header=T)  #tidyverseを使用した読み込み（少し速い）
 
 #tsv形式の場合、(a)read_tsv、(b)read_delim
 datatsv <- read_tsv(".tsv")
