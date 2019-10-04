@@ -50,8 +50,8 @@ library(rtweet)     ##twitterAPIに関するパッケージ
 
 #回帰等の分析に関するパッケージ
 
-library(corrplot) #多変数の関係の結果をグラフ化
-library(coefplot) #相関係数の結果をグラフ化
+library(corrplot) #算出した相関係数を可視化(色彩で表現)
+library(coefplot) #相関係数の結果をグラフ化(点プロット)
 library(jtool)  ##重回帰分析の結果を視覚的に表示する
 library(MASS) #多変量データ解析に使う
 library(boot) #Bootstrap関数
