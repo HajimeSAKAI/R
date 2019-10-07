@@ -1,0 +1,23 @@
+#駅からの距離を正確にする
+data0105 <- subset(data0105, data0105$Walk<6)
+data0110 <- subset(data0110, data0110$Walk<11)
+data0130 <- subset(data0130, data0130$Walk<31)
+
+#管理費をの外れ値を除去する
+
+#賃料を分割する(\100,000)
+
+#面積を分割する（100m2）
+
+#駐車場の有無で分割する
+
+#駐車料金で分割する（\10,000）
+
+#築年時を分割する（時代ごと）
+
+#histに平均値を挿入する
+data0105 <- subset(data0105, data0105$Walk<6)
+data0110 <- subset(data0110, data0110$Walk<11)
+data0130 <- subset(data0130, data0130$Walk<31)
+
+
