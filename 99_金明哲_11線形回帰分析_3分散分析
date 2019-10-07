@@ -1,0 +1,10 @@
+#回帰モデルの分散分析
+summary(aoc(Ozone~.,airquality[,1:4]))	#モデルのパラメータとAIC値を返す
+anova(lm(Ozone~.,airquality[,1:4]))	#回帰モデルの分散分析
+
+
+
+
+
+
+
