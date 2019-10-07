@@ -1,0 +1,43 @@
+#線形重回帰分析(以下の使用方法でやれ！)
+
+
+
+#一般的な重回帰分析
+
+##データの形を把握する
+pairs(airquality[,1:4]) #対散布図の描画
+
+##解析と結果
+air.lm<-lm(Ozone~Solar.R+Wind+Temp,data=airquality)
+summary(air.lm)
+
+round(coefficients(air.lm),2)
+
+
+
+
+#交互作用を考慮した回帰分析を求めることができる場合
+
+##交互作用とは、説明変数間に相関性があり、この関係が目的変数に影響すること
+##当てはまりが良いように...
+
+##ダミー変数を入れる場合はどうなのか？
+
+air.lm2<-lm(Ozone~(Solar.R+Wind+Temp)^2,data=airquality)
+summary(air.lm2)
+
+
+
+
+#変数・モデルの選択(AICを使用する)
+
+##AIC(正規分布を仮定しない)=(-2)*(モデルの最大対数犬度) + 2*(モデルのパラメータ数)
+##AIC(正規分布を仮定)= N(式に用いた個体数) * log(残差の2乗和/N) + 2*(モデルのパラメータ数)
+
+#AIC
+air.lm3<-step(air.lm2)
+
+#BIC(ベイズアプローチによる情報量規準)
+air.lm4<-step(air.lm2,k=log("標本サイズ"))
+
+
