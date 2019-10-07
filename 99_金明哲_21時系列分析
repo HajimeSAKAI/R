@@ -39,7 +39,7 @@ plot(diff(UKgas,lag=1))	#上の式と同じ
 
 
 ###自己共分散と自己相関（偏自己共分散・相関は、関数pacf）
-acf(UKgas)	#関acfの書式：acf(x,type=c("correlation","covatiance","partial",plot=TRUE, ... )
+acf(UKgas)	#関数pacfの書式：acf(x,type=c("correlation","covatiance","partial",plot=TRUE, ... )
 
 op<-par(mai=rep(0,25,4),mfrow=c(4,1))
 for(i in 1:4)plot(diff(log(UKgas),lag=i))
