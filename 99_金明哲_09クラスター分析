@@ -1,0 +1,79 @@
+#クラスター分析
+##外的基準を持たないデータをグルーピングする分析手法
+
+##階層的クラスター分析
+
+
+###1.データからの距離（類似度）を求める
+seiseki.d<-dist(seiseki)	#seisekiのユークリッド距離を求める
+round(seiseki.d)		#見やすくするために小数点を丸める
+
+(sei.hc<-hclust(seiseki.d))	#ユークリッド距離を用いた関数
+sei.hc$merge	#クラスター形成の履歴
+sei.hc$height	#樹形図の枝の長さ
+sei.hc$order	#左から右方向の個体番号
+sei.hc$labels	#個体のラベル
+sei.hc$method	#用いた方法
+sei.hc$call	#hclustの書式
+sei.hc$dist.method	#用いた距離の方法の名称
+
+
+###2.クラスター分析の方法（最近隣法、最遠隣法）を選択
+
+####関数hclustについて
+####summary
+####plot	#樹形図を作成、(data, hang=-1←で葉の高さを揃える)、(plclustでも代用可能)
+plot(hclust((dist(seiseki,"距離名")),"引数method"),hang=-1)
+#####距離名
+#####"canberra"
+#####引数method
+#####"single"	最近隣法
+#####"complete"	最遠隣法
+#####"average"	群平均法
+#####"centroid"	重心法
+#####"median"	メディアン法
+#####"ward.D"	ウォード法
+#####"mcquitty"	McQuitty法
+plot(sei.hc,hang=-1)
+rect.hclust(sei.hc,k=2,border=c(2,4))	#rect.hclustで境界の作成、クラスター数=2、境界が赤(2)、青(4)、h=で高さ指定して分割することも可能
+
+dend<-as.dendrogram(sei.hc)	#属性の変換
+str(dend)
+
+####cutree	#クラスター数を指定して、グルーピング
+cutree(sei.hc,k=2)	#k=2はクラスター数の設定
+
+####heatmap()	#クラスターの特徴を考察
+heatmap(seiseki)	#濃淡で大小を示すグラフ
+
+
+###3.選択された方法の「コーフェン行列」を求める
+
+####cophenetic	#コーフェン行列を返す
+cophenetic(sei.hc)	#樹形図はコーフェン行列に基づいているから...
+cor(seiseki.d,cophenetic(sei.hc))	#相関係数の値は歪みの大きさを表すが、分析結果が妥当であるということを示すわけではない
+
+
+###4.コーフェン行列に基づいて、樹形図の作成
+###5.結果の検討
+#少数個体を入れ替えるだけで結果が大きく変化してしまうことがあるので注意すること
+
+##非階層的クラスター分析
+###k平均法
+(seiseki.km<-kmeans(seiseki,2))
+summary(seiseki.km)
+
+seiseki.km$cluster
+
+###モデルに基づいたクラスター分析
+install.packages("mclust")
+library(mclust)
+plot(mclustBIC(iris[,1:4]))
+iris.hc<-hc(modelName="VVV",data=iris[,1:4])
+iris.hcl<-hclass(iris,hc,3)
+table(iris[,5],iris.hcl)	#クロス集計表の作成
+clParis(iris[,1:4],cl=iris.hcl)	#対散布図の作成
+
+
+
+
