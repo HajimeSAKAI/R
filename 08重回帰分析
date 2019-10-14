@@ -10,9 +10,42 @@ getwd()
 #必要ライブラリの読み込み
 library(tidyverse)
 
-data0105 <- read.csv("")
-data0110 <- read.csv("")
-data0130 <- read.csv("")
+data0105 <- read.csv("190109-05.csv",header=T)
+data0205 <- read.csv("190204-05.csv",header=T)
+data0305 <- read.csv("190306-05.csv",header=T)
+data0405 <- read.csv("190405-05.csv",header=T)
+data0505 <- read.csv("190506-05.csv",header=T)
+
+data0110 <- read.csv("190109-10.csv",header=T)
+data0210 <- read.csv("190204-10.csv",header=T)
+data0310 <- read.csv("190306-10.csv",header=T)
+data0410 <- read.csv("190405-10.csv",header=T)
+data0510 <- read.csv("190506-10.csv",header=T)
+
+data0130 <- read.csv("190109-30.csv",header=T)
+data0230 <- read.csv("190204-30.csv",header=T)
+data0330 <- read.csv("190306-30.csv",header=T)
+data0430 <- read.csv("190405-30.csv",header=T)
+data0530 <- read.csv("190506-30.csv",header=T)
+
+#欠損値の削除
+data0105 <- na.omit(data0105)
+data0205 <- na.omit(data0205)
+data0305 <- na.omit(data0305)
+data0405 <- na.omit(data0405)
+data0505 <- na.omit(data0505)
+
+data0110 <- na.omit(data0110)
+data0210 <- na.omit(data0210)
+data0310 <- na.omit(data0310)
+data0410 <- na.omit(data0410)
+data0510 <- na.omit(data0510)
+
+data0130 <- na.omit(data0130)
+data0230 <- na.omit(data0230)
+data0330 <- na.omit(data0330)
+data0430 <- na.omit(data0430)
+data0530 <- na.omit(data0530)
 
 
 ##-----------------------------------------------
