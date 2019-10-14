@@ -1,0 +1,184 @@
+#------------------------------------------------
+#-------初期設定の確認、ライブラリの読み込み-----
+#------------------------------------------------
+
+#作業フォルダの読み込み
+##作業フォルダ内に必要データが保存されていること！
+setwd("G:/Lifull_data")
+getwd()
+
+#必要ライブラリの読み込み
+library(tidyverse)
+
+data0105 <- read.csv("")
+data0110 <- read.csv("")
+data0130 <- read.csv("")
+
+
+##-----------------------------------------------
+##------重回帰分析をする前にやりたいこと
+##------http://data-naly.hatenablog.com/entry/2018/04/22/044115
+##-----------------------------------------------
+
+#相関関係の把握
+cor.Boston <- data0105 %>% cor
+
+#相関係数を可視化
+library(corrplot)
+corrplot(data0105 %>% cor, addConf.col = TRUE)
+
+#分散拡大要因のヒートマップ
+##分散拡大要因の算出
+vif <- 1/(1 - (data0105 %>% dplyr:::select(-medv) %>% cor)^2)
+##縦長形式への変換
+vif.l <- vif %>%
+  as.data.frame %>%
+  mutate(item1 = rownames(.)) %>%
+  gather(item2, vif, -item1)
+p <- ggplot(data = vif.l, aes(x = item1, y = item2, fill = vif)) +
+  geom_tile() + geom_text(label = sprintf("%.2f", vif)) +
+  scale_fill_gradient(low = "white", high = "red")
+print(p)
+
+
+#------------------------------------------------
+#-------Multiple_regression_analysis(ver.1.0)
+#-------基本的にデータが正規分布に従う場合のみに利用可能
+#------------------------------------------------
+
+#lm関数を使うだけで重回帰分析を実行
+lm.data0105 <- lm(Rent~., data=data0105)
+#早稲田大学のヘドニックアプローチの場合は以下のようになる(2年定期借家と仮定)
+lm.data0105 <- lm(Rent+Management.fee+(Key.Money/24)~., data=data0105)
+
+##-----------------------------------------------
+##(tip.1)Structureのみを除外して重回帰分析を行う場合
+###lm1.data0105 <- lm(Rent~.-Structure, data=data0105)
+##(tip.2)切片を除外して重回帰分析を行う場合
+###lm2.data0105 <- lm(Rent~.-1, data=data0105)
+##-----------------------------------------------
+
+#分析結果の要約
+summary(lm.data0105)
+##-----------------------------------------------
+##各回帰係数の推定値(Estimate)、標準偏差(Std. Error)、
+##t-値(t value)、P-値(Pr(>|t|))が表示
+##-----------------------------------------------
+##(***はP-値が0~0.001、**は0.001~0.01、*は0.01から0.05、)
+##(.は0.05から0.1、印がない場合は0.1から1の値の範囲)
+##-----------------------------------------------
+
+###Pr( >|t|)は t 統計量の P 値であるが、全て 0.01 より低い、
+###つまり全て有意水準 1%で真の係数のが値が0
+###(つまりその説明変数は Y に何の影響も与えない)という帰無仮説は棄却される事がわかる。
+###一般にこの数字が小さいほどその説明変数は説明力があると解釈できる。
+
+#回帰係数の表示(推定結果のうち係数の推定値だけを見たい場合)
+coef(summary(lm.data0105))
+#回帰係数を可視化
+#縦軸に説明変数、横軸に回帰係数がプロット
+library(coefplot)
+coefplot(lm.Boston)
+
+##当てはめ値や残差を見るには、以下の関数を用いる。
+##1.当てはめ値
+predict(lm.data0105)
+##2.残差
+residuals(lm.data0105)
+
+#説明力の低い変数を除去し、回帰を実行する
+lm.step.data0105 <- step(lm.data0105)
+
+
+
+#------------------------------------------------
+#-------Multiple_regression_analysis(ver.2.0)
+#-------https://stats.biopapyrus.jp/glm/mlm-r.html
+#-------基本的にデータが正規分布に従う場合のみに利用可能
+#------------------------------------------------
+
+#?どうやったらデータフレームの全てを一気にヒストグラムにできるか?
+
+#データの指定
+data0105_Rent <- data0105$Rent
+data0105_Walk <- data0105$Walk
+data0105_Parking <- data0105$Parking
+data0105_NSEW <- data0105$NSEW
+data0105_Structure <- data0105$Structure
+data0105_Management.fee <- data0105$Management.fee
+data0105_Number <- data0105$Number
+data0105_Area <- data0105$Area
+data0105_Year <- data0105$Year
+
+#データが正規分布っぽくない場合は、
+#対数変換を行って、正規分布に近づけてみる（一応全部やってみた）
+std0105_Rent <- log10(data0105_Rent)
+std0105_Walk <- log10(data0105_Walk)
+std0105_Parking <- log10(data0105_Parking)
+std0105_NSEW <- log10(data0105_NSEW)
+std0105_Structure <- log10(data0105_Structure)
+std0105_Management.fee <- log10(data0105_Management.fee)
+std0105_Number <- log10(data0105_Number)
+std0105_Area <- log10(data0105_Area)
+std0105_Year <- log10(data0105_Year)
+
+#標準化した数値の単位を標準化
+#独立変数の各々は、単位が異なる
+#そのため、解析する前に両者が同じ比重となるように標準化
+std0105_Rent <- scale(std0105_Rent)
+std0105_Walk <- scale(std0105_Walk)
+std0105_Parking <- scale(std0105_Parking)
+std0105_NSEW <- scale(std0105_NSEW)
+std0105_Structure <- scale(std0105_Structure)
+std0105_Management.fee <- scale(std0105_Management.fee)
+std0105_Number <- scale(std0105_Number)
+std0105_Area <- scale(std0105_Area)
+std0105_Year <- scale(std0105_Year)
+
+#データを回帰モデルにぶち込む
+#独自にデータを作ってあるので、「data=」がいらない
+MRS_data0105 <- lm(
+#被説明変数
+data0105_Rent~
+
+#説明変数
+##正規分布に従いと仮定した数値
+std0105_Walk+std0105_Parking+std0105_Number+
+##ダミー変数
+data0105_NSEW+data0105_Structure+
+##正規分布に従うと考えられる数値
+data0105_Management.fee+data0105_Area
+)
+summary(MRS_data0105)
+
+
+#回帰モデルの評価（2つのモデルを作成して、両者の適合の良さを比較してみる）
+
+##RMSEの比較	sqrt(sum(resid(回帰モデル)^2)/length(resid(回帰モデル)))
+##AICの比較	AIC(回帰モデル)
+##AICの方が説明力が強い?(多分...)
+
+m1_data0105 <- lm(data0105_Rent~ 
+std0105_Walk+std0105_Parking+std0105_Number+
+data0105_NSEW+data0105_Structure+
+data0105_Management.fee+data0105_Area
+)
+sqrt(sum(resid(m1_data0105)^2)/length(resid(m1_data0105)))
+AIC(m1_data0105)
+
+m2_data0105 <- lm(data0105_Rent~
+std0105_Walk+std0105_Parking+
+data0105_Management.fee+data0105_Area)
+sqrt(sum(resid(m2_data0105)^2)/length(resid(m2_data0105)))
+AIC(m2_data0105)
+
+#両方のモデルの残差プロットを描き、視覚的に見比べてみる。
+#残差が0の方が当てはまりが良い(常識的に考えると...)
+par(mfrow = c(1, 2))
+plot(resid(m1_data0105_data0105), ylim = c(-1, 1))
+grid()
+abline(h = 0, col = 'red')
+plot(resid(m2_data0105_data0105), ylim = c(-1, 1))
+grid()
+abline(h = 0, col = 'red')
+
