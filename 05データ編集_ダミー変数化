@@ -1,16 +1,27 @@
+##case1
 library(makedummies)
 d_data <- makedummies(s_data, basal_level = TRUE)
 colnames(d_data) <- c("治療なし","治療あり","効果なし","効果あり")
+
+##case2
+dummy_cols(.data = data0105, select_columns = c("Structure", "NSEW"),
+remove_first_dummy = FALSE)
 
 #駅の
 
 
 #構造
 
+
 #方位
+##南向き
+##東向き
+##それ以外を0に設定しておく（不明を含めて）
 
-#駐車料金
 
+#有料駐車料金
+##0
+##1以上を1とする
 
 
 
