@@ -82,11 +82,17 @@ print(p)
 #lm関数を使うだけで重回帰分析を実行
 lm.data0105 <- lm(Rent~., data=data0105)
 #早稲田大学のヘドニックアプローチの場合は以下のようになる(2年定期借家と仮定)
-lm.data0105 <- lm(Rent+Management.fee+(Key.money/24)~., data=data0105)
+lm.data0105_waseda <- lm(Rent+Management.fee+(Key.money/24)~., data=data0105)
 
 ##-----------------------------------------------
 ##(tip.1)Structureのみを除外して重回帰分析を行う場合
-###lm1.data0105 <- lm(Rent~.-Structure, data=data0105)
+lm1.data0105 <- lm(Rent~.-Structure, data=data0105)
+lm1.data0105_waseda <- lm(
+Rent+Management.fee+(Key.money/24)~.-Structure-NSEW
+-Deposit1-Deposit2-Amortization
+-Parking,
+data=data0105
+)
 ##(tip.2)切片を除外して重回帰分析を行う場合
 ###lm2.data0105 <- lm(Rent~.-1, data=data0105)
 ##-----------------------------------------------
