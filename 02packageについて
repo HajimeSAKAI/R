@@ -77,7 +77,8 @@ library(tidyverse)  #パッケージを集約したパッケージ
 library(RColorBrewer) ##可視化の際に豊富な色を使用するためのパッケージ
 
 library(devtools) #install_githubを含んだパッケージ
-
+##どうやって使うのか不明
+##devtools::install_github("toshi-ara/makedummies")
 
 #----------------------------------------------------------------------
 library(Rcmdr) #Rコマンダーは、直感的に分析するのに最適
