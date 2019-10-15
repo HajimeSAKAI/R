@@ -82,7 +82,7 @@ print(p)
 #lm関数を使うだけで重回帰分析を実行
 lm.data0105 <- lm(Rent~., data=data0105)
 #早稲田大学のヘドニックアプローチの場合は以下のようになる(2年定期借家と仮定)
-lm.data0105 <- lm(Rent+Management.fee+(Key.Money/24)~., data=data0105)
+lm.data0105 <- lm(Rent+Management.fee+(Key.money/24)~., data=data0105)
 
 ##-----------------------------------------------
 ##(tip.1)Structureのみを除外して重回帰分析を行う場合
@@ -115,9 +115,11 @@ coefplot(lm.Boston)
 
 ##当てはめ値や残差を見るには、以下の関数を用いる。
 ##1.当てはめ値
-predict(lm.data0105)
+hist(predict(lm.data0105))
+plot(table(predict(lm.data0105)))
 ##2.残差
-residuals(lm.data0105)
+hist(residuals(lm.data0105))
+plot(residuals(lm.data0105))
 
 #説明力の低い変数を除去し、回帰を実行する
 lm.step.data0105 <- step(lm.data0105)
