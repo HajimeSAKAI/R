@@ -1,0 +1,16 @@
+library(makedummies)
+d_data <- makedummies(s_data, basal_level = TRUE)
+colnames(d_data) <- c("治療なし","治療あり","効果なし","効果あり")
+
+#駅の
+
+
+#構造
+
+#方位
+
+#駐車料金
+
+
+
+
