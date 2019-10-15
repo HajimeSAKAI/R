@@ -7,7 +7,46 @@ colnames(d_data) <- c("治療なし","治療あり","効果なし","効果あり
 dummy_cols(.data = data0105, select_columns = c("Structure", "NSEW"),
 remove_first_dummy = FALSE)
 
+##case3
+library(dummies)
+structure<-dummy(data0105$Structure)
+nsew<-dummy(data0105$NSEW)
+##ダミー変数の組み込み
+K<-data.frame(data0105,structure,nsew)
+
 #駅の
+replace(z, which(is.na(z)), 10) 
+
+number<-data0105$Number
+
+#------------------------------------------
+#https://dev.classmethod.jp/statistics/r-dataframe-lapply/
+#------------------------------------------
+toPoint <- function(factors) { 
+  mapping <- c(
+  "1"=0, "2"=1,"3"=1.7, "4"=2.5,
+  "5"=3.2, "6"=4.3,"7"=5.3, "8"=6.3,
+  "9"=7.1, "10"=8.5,"11"=10.7, "12"=12.7,
+  "13"=14, "14"=15.6,"15"=17.1, "16"=18
+  )
+  mapping[factor_strings]
+}
+ps <- data.frame(lapply(number, toPoint))
+
+#------------------------------------------
+#https://teratail.com/questions/99951
+#------------------------------------------
+category <- matrix(c(
+ "男", "1",
+ "女", "2",
+ "とても当てはまる",    "positive",
+ "少し当てはまる",     "positive",
+ "あまり当てはまらない",  "negative",
+ "まったく当てはまらない", "negative",
+ "どちらでもない",       "none"
+ ), byrow=T, ncol=2
+)
+
 
 
 #構造
@@ -22,6 +61,6 @@ remove_first_dummy = FALSE)
 #有料駐車料金
 ##0
 ##1以上を1とする
-
-
+data0105$Parking %>% 
+data0105$Parking %>%
 
