@@ -8,8 +8,12 @@ lm.data0105 <- lm(Rent~., data=data0105)
 
 #早稲田大学のヘドニックアプローチの場合は以下のようになる(2年定期借家と仮定)
 #分析を行う際はこちらを採用(基本的には、左辺が料金、右辺が要因になるようにする)
+
+##被説明変数の説明力を直感的に理解する場合
 lm.data0105_waseda <- lm(Rent+Management.fee+(Key.money/24)~., data=data0105)
+##ln()を使うことで、被説明変数への影響力を偏回帰係数の大小で説明する場合
 lm.log.data0105_waseda <- lm(log(Rent+Management.fee+(Key.money/24))~., data=data0105)
+
 lm1.data0105_waseda <- lm(
 Rent+Management.fee+(Key.money/24)~.-Structure-NSEW
 -Deposit1-Deposit2-Amortization
