@@ -1,88 +1,32 @@
 #------------------------------------------------
-#-------初期設定の確認、ライブラリの読み込み-----
-#------------------------------------------------
-
-#作業フォルダの読み込み
-##作業フォルダ内に必要データが保存されていること！
-setwd("H:/SUUMO_data/2019_06")
-getwd()
-
-#必要ライブラリの読み込み
-library(tidyverse)
-
-data0105 <- read.csv("190109-05.csv",header=T)
-data0205 <- read.csv("190204-05.csv",header=T)
-data0305 <- read.csv("190306-05.csv",header=T)
-data0405 <- read.csv("190405-05.csv",header=T)
-data0505 <- read.csv("190506-05.csv",header=T)
-
-data0110 <- read.csv("190109-10.csv",header=T)
-data0210 <- read.csv("190204-10.csv",header=T)
-data0310 <- read.csv("190306-10.csv",header=T)
-data0410 <- read.csv("190405-10.csv",header=T)
-data0510 <- read.csv("190506-10.csv",header=T)
-
-data0130 <- read.csv("190109-30.csv",header=T)
-data0230 <- read.csv("190204-30.csv",header=T)
-data0330 <- read.csv("190306-30.csv",header=T)
-data0430 <- read.csv("190405-30.csv",header=T)
-data0530 <- read.csv("190506-30.csv",header=T)
-
-#欠損値の削除
-data0105 <- na.omit(data0105)
-data0205 <- na.omit(data0205)
-data0305 <- na.omit(data0305)
-data0405 <- na.omit(data0405)
-data0505 <- na.omit(data0505)
-
-data0110 <- na.omit(data0110)
-data0210 <- na.omit(data0210)
-data0310 <- na.omit(data0310)
-data0410 <- na.omit(data0410)
-data0510 <- na.omit(data0510)
-
-data0130 <- na.omit(data0130)
-data0230 <- na.omit(data0230)
-data0330 <- na.omit(data0330)
-data0430 <- na.omit(data0430)
-data0530 <- na.omit(data0530)
-
-
-##-----------------------------------------------
-##------重回帰分析をする前にやりたいこと
-##------http://data-naly.hatenablog.com/entry/2018/04/22/044115
-##-----------------------------------------------
-
-#相関関係の把握
-cor.Boston <- data0105 %>% cor
-
-#相関係数を可視化
-library(corrplot)
-corrplot(data0105 %>% cor, addConf.col = TRUE)
-
-#分散拡大要因のヒートマップ
-##分散拡大要因の算出
-vif <- 1/(1 - (data0105 %>% dplyr:::select(-medv) %>% cor)^2)
-##縦長形式への変換
-vif.l <- vif %>%
-  as.data.frame %>%
-  mutate(item1 = rownames(.)) %>%
-  gather(item2, vif, -item1)
-p <- ggplot(data = vif.l, aes(x = item1, y = item2, fill = vif)) +
-  geom_tile() + geom_text(label = sprintf("%.2f", vif)) +
-  scale_fill_gradient(low = "white", high = "red")
-print(p)
-
-
-#------------------------------------------------
 #-------Multiple_regression_analysis(ver.1.0)
 #-------基本的にデータが正規分布に従う場合のみに利用可能
 #------------------------------------------------
 
-#lm関数を使うだけで重回帰分析を実行
+#lm関数を使うだけで重回帰分析を実行(不十分だけど記載)
 lm.data0105 <- lm(Rent~., data=data0105)
+
 #早稲田大学のヘドニックアプローチの場合は以下のようになる(2年定期借家と仮定)
+#分析を行う際はこちらを採用(基本的には、左辺が料金、右辺が要因になるようにする)
 lm.data0105_waseda <- lm(Rent+Management.fee+(Key.money/24)~., data=data0105)
+lm.log.data0105_waseda <- lm(log(Rent+Management.fee+(Key.money/24))~., data=data0105)
+lm1.data0105_waseda <- lm(
+Rent+Management.fee+(Key.money/24)~.-Structure-NSEW
+-Deposit1-Deposit2-Amortization
+-Parking,
+data=data0105
+)
+lm1.log.data0105_waseda <- lm(
+log(Rent+Management.fee+(Key.money/24))~.-Structure-NSEW
+-Deposit1-Deposit2-Amortization
+-Parking,
+data=data0105
+)
+summary(lm.data0105_waseda)
+summary(lm.log.data0105_waseda)
+summary(lm1.data0105_waseda)
+summary(lm1.log.data0105_waseda)
+
 
 ##-----------------------------------------------
 ##(tip.1)Structureのみを除外して重回帰分析を行う場合
