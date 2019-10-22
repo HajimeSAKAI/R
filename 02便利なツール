@@ -1,0 +1,7 @@
+#実行時間の計測
+system.time(data0110<-read_csv(""))
+
+
+
+
+
