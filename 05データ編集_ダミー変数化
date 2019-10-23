@@ -1,23 +1,47 @@
-##case1
+#case1(ものすごく簡単にダミー変数が作成できる)
 library(makedummies)
-d_data <- makedummies(s_data, basal_level = TRUE)
-colnames(d_data) <- c("治療なし","治療あり","効果なし","効果あり")
+library(fastDummies)
 
-##case2
-dummy_cols(.data = data0105, select_columns = c("Structure", "NSEW"),
-remove_first_dummy = FALSE)
+data0105_dummied<-
+dummy_cols(.data = data0105, 
+select_columns = c(
+"Number",
+"Structure",
+"NSEW"
+),
+remove_first_dummy = FALSE
+)
 
-##case3
+
+#case2
+##ダミー変数オブジェクトの作成
 library(dummies)
-structure<-dummy(data0105$Structure)
-nsew<-dummy(data0105$NSEW)
+number_data0105<-dummy(data0105$Number)
+structure_data0105<-dummy(data0105$Structure)
+nsew_data0105<-dummy(data0105$NSEW)
 ##ダミー変数の組み込み
-K<-data.frame(data0105,structure,nsew)
+data0105_dummied<-data.frame(data0105,number_data0105,structure_data0105,nsew_data0105)
 
-#駅の
-replace(z, which(is.na(z)), 10) 
 
-number<-data0105$Number
+#numberの変換について(駅距離に直す方法)
+
+##数値から数値への変換(int型)
+###numberの中の6をNAに変換------------------------------------
+replace(number,which(number==6),NA)
+###あまり使われないけれど重要度高い！---------------------------
+
+##一般的な置換(chr型の変換)
+###NAを10に変換
+replace(data0105, which(is.na(data0105)), 10)
+###13番目の数をNAに変換
+replace(number,c(13),NA)
+
+###chr型の例
+x <- c(1, 2, 3, 4, 5)                # x <- 1:5 でもよい
+( y <- replace(x, c(2,4), c(0,0)) )  # x の 2, 4 番目の要素を 0 に置き換える
+( z <- replace(x, c(2,4), NA) )      # 今度は NA で置き換える
+replace(z, which(is.na(z)), 10)      # z の NA を 10 で置き換え
+
 
 #------------------------------------------
 #https://dev.classmethod.jp/statistics/r-dataframe-lapply/
@@ -48,19 +72,15 @@ category <- matrix(c(
 )
 
 
-
 #構造
-
 
 #方位
 ##南向き
 ##東向き
 ##それ以外を0に設定しておく（不明を含めて）
 
-
 #有料駐車料金
 ##0
 ##1以上を1とする
 data0105$Parking %>% 
 data0105$Parking %>%
-
