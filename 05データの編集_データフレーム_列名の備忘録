@@ -1,0 +1,17 @@
+#列名の変更について(names関数は名前のないオブジェクトに名前を付すことができる)
+age    <- c( 20,  30,  40)
+height <- c(170, 168, 175)
+wait   <- c( 67,  64,  70)
+df <- data.frame(age, height, wait)
+
+##列名全体のベクトルをまとめて指定して変更する方法↓
+names(df) <- c("age", "height", "weight")
+##インデックス番号を使って、一部を変更する方法↓
+names(df)[3] <- "weight"
+
+##できれば、列名の指定で変更を行いたい。
+names(df)[ which( names(df)=="wait" ) ] <- "weight"
+
+#
+
+##
