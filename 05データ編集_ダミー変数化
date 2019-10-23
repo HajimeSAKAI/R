@@ -1,4 +1,5 @@
 #case1(ものすごく簡単にダミー変数が作成できる)
+#でも、1,2,3...がバラバラになるのでcase2の方がおすすめ
 library(makedummies)
 library(fastDummies)
 
@@ -16,18 +17,66 @@ remove_first_dummy = FALSE
 #case2
 ##ダミー変数オブジェクトの作成
 library(dummies)
-number_data0105<-dummy(data0105$Number)
-structure_data0105<-dummy(data0105$Structure)
-nsew_data0105<-dummy(data0105$NSEW)
+number<-dummy(data0105$Number)
+structure<-dummy(data0105$Structure)
+nsew<-dummy(data0105$NSEW) #必要なダミー変数を抜き出して使うことはできない。一度dfに埋め込んでからやること(検証済み)
+
 ##ダミー変数の組み込み
-data0105_dummied<-data.frame(data0105,number_data0105,structure_data0105,nsew_data0105)
+data0105_dummied<-data.frame(data0105,nsew)
 
+##必要なダミー変数を抜き出して使う
+###方位(南向き系統、東向き系統)
+dummied_nsew<-(data0105_dummied$NSEW1+data0105_dummied$NSEW2)
+data0105_dummied<-data.frame(data0105,number,structure,dummied_nsew)  #駅ダミー考慮df
+##ダミー作成後に不必要な列(要素)の削除
+data0105_dummied<-data0105_dummied[,c(-1,-10,-13)]
 
-#numberの変換について(駅距離に直す方法)
-
+#中心地からの距離
+##numberの変換について(駅距離に直す方法)
 ##数値から数値への変換(int型)
-###numberの中の6をNAに変換------------------------------------
-replace(number,which(number==6),NA)
+###その都度格納する必要がある(下の例を参考にすること)
+###数値が変に変形しないように注意する(事前に順序立てること)
+nubmer<-data0105$Number
+number<-replace(number,which(number== 9),999999999)
+number<-replace(number,which(number==10),99999999)
+number<-replace(number,which(number==11),9999999)
+number<-replace(number,which(number==12),999999)
+number<-replace(number,which(number==13),99999)
+number<-replace(number,which(number==14),9999)
+number<-replace(number,which(number==15),999)
+number<-replace(number,which(number==16),99)
+number<-replace(number,which(number==1),111)
+number<-replace(number,which(number==2),222)
+number<-replace(number,which(number==3),333)
+number<-replace(number,which(number==4),444)
+number<-replace(number,which(number==5),555)
+number<-replace(number,which(number==6),666)
+number<-replace(number,which(number==7),777)
+number<-replace(number,which(number==8),888)
+###再変換する
+number<-replace(number,which(number==999999999),7.1)
+number<-replace(number,which(number==99999999),8.5)
+number<-replace(number,which(number==9999999),10.7)
+number<-replace(number,which(number==999999),12.7)
+number<-replace(number,which(number==99999),14)
+number<-replace(number,which(number==9999),15.6)
+number<-replace(number,which(number==999),17.1)
+number<-replace(number,which(number==99),18)
+number<-replace(number,which(number==111),0)
+number<-replace(number,which(number==222),1)
+number<-replace(number,which(number==333),1.7)
+number<-replace(number,which(number==444),2.5)
+number<-replace(number,which(number==555),3.2)
+number<-replace(number,which(number==666),4.3)
+number<-replace(number,which(number==777),5.3)
+number<-replace(number,which(number==888),6.3)
+
+##ダミー変数の組み込み
+data0105_dummied1<-data.frame(data0105,number,structure,dummied_NSEW)  #都心部からの距離を考慮df
+##ダミー作成後に不必要な列(要素)の削除
+data0105_dummied1<-data0105_dummied[,c(-1,-10,-13)]
+
+
 ###あまり使われないけれど重要度高い！---------------------------
 
 ##一般的な置換(chr型の変換)
@@ -46,6 +95,7 @@ replace(z, which(is.na(z)), 10)      # z の NA を 10 で置き換え
 #------------------------------------------
 #https://dev.classmethod.jp/statistics/r-dataframe-lapply/
 #------------------------------------------
+###この方法を使わずに、上記の方法を用いたが、こっちの方が断然に楽...
 toPoint <- function(factors) { 
   mapping <- c(
   "1"=0, "2"=1,"3"=1.7, "4"=2.5,
@@ -71,14 +121,11 @@ category <- matrix(c(
  ), byrow=T, ncol=2
 )
 
-
 #構造
-
 #方位
 ##南向き
 ##東向き
 ##それ以外を0に設定しておく（不明を含めて）
-
 #有料駐車料金
 ##0
 ##1以上を1とする
