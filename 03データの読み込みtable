@@ -1,0 +1,296 @@
+#データ参照元
+#https://qiita.com/gigamori/items/3f923cdd188736132237
+
+library(data.table)
+data.tableは簡単に言うとサイズの大きいデータフレーム。
+確かに高速。慣れると大規模データはこれなくして扱えない。
+データフレームと扱い方が大きく異なるが、これだけ抑えておけば十分ということをまとめた。
+
+data.tableには行名がない
+dplyrとセットで使うことが多いので、同時に呼び出しておくといい
+ただしtidyr（集計用ライブラリ）までは使わなくていい
+
+library(data.table)
+library(dplyr)
+
+data.tableの生成
+テキストファイルをdata.tableとして取り込む
+
+x.dt <- fread("filename.csv", colClasses=c("integer", "character", "integer"))
+setnames(x.dt, "V1", "cid")
+setkey(x.dt, "cid") #keyは設定しなくてもいい
+
+Windowsでは文字コードを設定しても変数名（ヘッダ）に含まれる日本語は文字化け
+データ部分は問題はないので、一度ヘッダを文字列として取り込んで、それを後で列名として付ける。
+
+dt <- fread("filename.csv", encoding="UTF-8")
+colnames(dt) <- fread("filename.csv", header=F, nrows=1, encoding="UTF-8") %>% as.character
+
+データフレームをdata.tableに変換
+x.dt <- data.table(x.df, key="cid")
+
+データの抽出
+x.dt[行インデックス, 列インデックス, ]
+
+行指定
+x.dt[1:3, ,]
+x.dt[cid==100, ,]
+
+列指定
+x.dt[, 2, with=F]
+x.dt[, .(cid, click),]
+x.dt[, c('cid', 'click')]
+x.dt[, -'cid']
+x.dt[, -c('cid', 'click')]
+
+番号指定の場合第3添字にwith=F
+複数列を抽出する場合は以下のいずれかで抽出できる。
+.()もしくはlist()（data.tableの添字内でドットはlistの省略）で抽出する。
+列名の文字列のベクトル
+特定の列以外を抽出する場合はリスト指定はできず、文字列で指定する。
+
+ソート
+x.dt[order(aid, -bid),,] -> d
+
+集計
+x.dt[, mean(imp), by=aid]
+x.dt[, mean(imp), by=aid==1]
+x.dt[, .N, by=aid]
+※.Nはカウント
+
+
+データの変更
+x.dt[,列名:=新しい値]の記法が万能。追加、削除、全更新、一部更新ができる。
+
+列追加
+x.dt[, 新しい列名:=cost*2]
+列削除
+x.dt[, 既存の列名:=NULL]
+列更新
+x.dt[, 既存の列名:=imp*1000]
+一部更新
+x.dt[行条件, 既存の列名:=cost*2]
+列名変更
+setnames(d, 既存カラム名, 新カラム名)
+
+
+データの結合
+列結合
+merge(d1, d2, by) -> newd
+byを指定しないと、d1、d2の共通のキー列が採用される。なければd1とd2に共通して現れる列名からこちらで明示する。要するにあらかじめ共通の列名を設定しておく必要がある
+by.xやby.yがない
+勝手にkeyがつけられる
+行結合
+dt_new <- rbindlist(list(t1, t2))
+rbind_all()は非推奨、rbind_rows()はdata.tableにおいてfactor型やinteger64型の列が
+正しく結合されない（型がそれぞれcharacter型、numeric型になる）バグがあるので使えない
+
+縦横変換
+dt %>% dcast.data.table(aid ~ gid, fun=sum, value.var="click") -> crosstab.dt
+crosstab.dt %>% melt.data.table(...) -> dt
+dcast.data.table()はtidyr::spread()と同じ。
+melt.data.table()はtidyr::gather()と同じ。
+library(dplyr)
+基本的にはチェーンで使うための関数と考えておけばいい（それ以外であれば直接data.tableの関数を使うほうが便利）
+SQLっぽいコマンド名が使えるので便利だが、data.tableの扱い（Rっぽい記法）に慣れていればそちらでもいい。
+
+抽出
+d %>% head
+d %>% tail
+必ずしも使わなくていい
+head(20)やtail(10)など行数を指定できる
+データの抽出
+タイプ量では添字の記法のほうが少ないので必ずしも使わなくていい
+行指定、列指定、並べ替え
+行指定
+d %>% filter(id==100)
+列指定
+d %>% select(id, cnt)
+番号指定の場合第3添字にwith=F
+列指定でc()はNG。.()もしくはlist()で抽出する。
+ソート
+d %>% arrange(aid, -bid)
+集計
+集計はdplyrのチェーンを使うのが楽でいい。
+
+単一列
+
+d %>% select(cid) %>% distinct %>% count
+複数列
+
+d %>% group_by(aid, bid) %>% summarise(sum(imp), sum(click))
+このgroup_by()からのsummarise(集計関数)は定番
+
+集計関数は
+
+sum()
+max()
+min()
+n(): SQLのCOUNT
+n_distinct(): SQLのCOUNT(DISTINCT ...)
+mean()
+median()
+sd()
+などがある
+
+Window関数
+こちらもdplyrのチェーンが必要。
+Window関数はSQLでは
+
+SELECT window関数(...) OVER (PARTITION BY 列), ... FROM ...
+SELECT window関数(...) OVER (ORDER BY 列), ... FROM ...
+SELECT window関数(...) OVER (PARTITION BY 列 ORDER BY 列 DESC), ... FROM ...
+だが、R/dplyrではそれぞれ
+
+dt %>% 
+    group_by(列) %>%       # 「PARTITION BY 列」に対応
+    mutate(window関数(...))
+
+dt %>% 
+    arrange(列) %>%        # 「ORDER BY 列」に対応
+    mutate(window関数(...))
+
+dt %>% 
+    group_by(列) %>%       # 「PARTITION BY 列」に対応
+    arrange(desc(列)) %>%  # 「ORDER BY 列」に対応
+    mutate(window関数(...))
+に対応する。
+
+Window関数には
+
+ランキング
+row_number(): 同順位がある場合は出現順
+min_rank(): 同順位がある場合、次は順位の数値を飛ばす
+dense_rank(): 同順位がある場合、次は順位の数値を飛ばさない
+cume_dist(): 累積相対度数
+オフセット（ずらす）
+lead(列, n = ずらす数, default = 値がない場合の値):
+lag(列, n = ずらす数, default = 値がない場合の値):
+（累積）
+（ローリング）
+などがある。
+
+参考
+http://qiita.com/matsuou1/items/db6e8c48fcfd791dd876
+
+変更（タイプ量的にはdata.tableの添字の記法で十分）
+列追加
+d %>% mutate(cpm = 1000*cost/imp) -> d
+列削除
+d %>% select(-click) -> d
+列更新
+d %>% mutate(cost = cost*2) -> d
+一部更新は
+
+d %>% mutate(cost = ifelse(cost > 1000, 2000, cost*2) -> d
+
+mutate(ifelse(...))はよく使うが、ifelse()自体日時の処理では使えないので注意が必要
+
+※mutateはどちらにも使える
+
+列名変更
+d %>% rename(新カラム名 = 既存カラム名) -> d
+結合
+列結合（merge.data.table()で十分？）
+d1 %>% inner_join(d2, by="aid") -> newd
+left_join(d1, d2, by="aid") -> newd
+inner_join()、left_join()、right_join()、full_join()がある
+型が一致していないと使えない。merge()で慣れていればそれでいいかも
+byについてもmerge.data.table()と同じ仕様。あらかじめ共通の列名を設定しておく必要がある
+行結合
+rbind_rows()にバグがあり、list型を引数に取るrbindlist()を使うしかないため、dplyrでは行結合できない。
+
+発展的な使い方の例
+data.table, dplyrの発展的な使い方をいくつか紹介する。
+
+結合の応用パターン
+集計結果に基づいてjoinや行の絞り込みをすることが結構ある。
+その際にはdplyrを使って以下のように一時テーブルを作成してからjoinやfilterすることになるのだが、
+
+# ログインが2回以上のユーザのみ抽出
+log.dt %>% 
+  filter(activity_name == 'ログイン') %>% 
+  group_by(user_id) %>% 
+  summarise(cnt = n()) %>% 
+  filter(cnt > 1) -> log_1.dt
+log.dt %>% 
+  filter(user_id %in% log_1.dt$user_id) %>% ...
+これを一度で一時テーブルを作成せずに済ませる方法がある。
+
+log.dt %>%
+  filter(user_id %in% log.dt[activity_name == 'ログイン',.BY[.N>1], by = user_id][,user_id]) %>% ...
+data.tableのbyで各行1となる.Iを集計して、行数をカウント。
+その行数が1を超える行のbyで指定した列を.BYで抽出する。
+
+以下も同じ
+
+x.dt %>% group_by(customer_cd) %>% mutate_all(funs(function(x){cumsum(x)-x}))
+x.dt[, lapply(.SD, function(x){cumsum(x)-x}), by = customer_cd]
+.SD, .I, .BYあたりは使うと便利なので覚えておくといいかもしれない。
+
+
+
+よくあるログ集計
+ログからセグメントごとのアクション状況を集計する例
+
+年代、直近購入からの経過日数に基づいて顧客をセグメンテーションし、
+メール配信した際のパフォーマンスを見る。
+
+mail_delivery.dt %>% 
+  filter(user_id %in% mail_delivery.dt[date_deliver=='2017-03-01', user_id]) %>% 
+  mutate(
+    age_range = cut(age, breaks=c(0, 20, 30, 40, max(age, na.rm=T)), labels=c('20>=', '21-30', '31-40', '41<='), right = T, ordered = T),
+    range_from_last_purchase = cut(days_from_last_purchase, breaks=c(0,31,93,365,max(days_from_last_purchase, na.rm=T)), labels=c('1 mo.>=', '1-3 mo.', '4-12 mo.', '13 mo.<='), right = F, ordered=T),
+    years_from_last_purchase = cut(days_from_last_purchase, breaks=c((0:10)*365, max(last_purchase, na.rm=T)), labels=c(paste('<',(1:10),sep=''),'10<='), ordered=T)
+  ) %>%
+  group_by(age_range, range_from_last_purchase) %>% 
+  summarise(
+    n_user = n(),
+    n_open = sum(!is.na(datetime_open)),
+    n_click = sum(!is.na(datetime_click)),
+    n_cv = sum(!is.na(datetime_cv))
+  ) %>% 
+  mutate(
+    r_open = n_open / n_deliver,
+    r_click = n_click / n_deliver,
+    r_cv = n_cv / n_deliver
+  ) %>% 
+  rename(
+    `ユーザ数` = n_user, 
+    `開封数` = n_open, 
+    `クリック数` = n_click, 
+    `CV数` = n_cv, 
+    `開封率` = r_open, 
+    `クリック率` = r_click, 
+    `CVR` = r_cv
+  ) -> total_performance_by_segment.dt
+
+require(rpivotTable)
+total_performance_by_segment.dt %>% rpivotTable
+
+
+
+アクション回数の分布を見る例
+顧客ごとの配信回数、反応数などを集計し、
+回数ごとの顧客数の
+分布を見る。まとめて2回集計する。このようなケースもよくある。
+
+mail_delivery.dt %>% 
+  group_by(user_id) %>%
+  summarise(
+    n_deliver = n(), 
+    n_open = sum(!is.na(datetime_open)), 
+    n_click = sum(!is.na(datetime_click)), 
+    n_cv = sum(!is.na(datetime_cv))
+  ) %>% 
+  group_by(n_deliver, n_open, n_click, n_cv) %>%
+  summarise(n_user = n()) %>%
+  rename(
+    `配信数` = n_deliver, 
+    `開封数` = n_open, 
+    `クリック数` = n_click, 
+    `CV数` = n_cv, 
+    `ユーザ数` = n_user
+  ) -> n_actions.dt
+
+n_actions.dt %>% rpivotTable
