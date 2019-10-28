@@ -52,7 +52,13 @@ ccd(mdeaths,fdeaths)
 ##トレンド、周期的に変動する成分、ノイズなどが含まれる。
 ##時系列解析では、周期成分の有無、各成分の強さなどを分析する場合がある。
 ###パッケージstatsを用いてピリオドグラムを用いて、スペクトル密度関数を推定する
+
+
+
 library(stats)
+
+
+
 op<- par(mfrow=c(2,2),mar=c(5,4,4,2))
 spec.pgram(UKgas)
 spec.pgram(UKgas,spans=c(3,3))
@@ -70,7 +76,13 @@ spectrum(ldeaths,method="ar");par(op)
 PP.test(lh)	#library(stats)、p値を見て単位根の有無を検定
 
 install.packages("tseries")
+
+
+
 library(tseries)#パッケージfSeriesには、adfTest()やunitrootTest()等がある
+
+
+
 adf.test(UKgas)	#パッケージtseriesより、ディッキ―フラーの単位根検定関数
 
 adf.test(diff(UKgas))$p.value	#非定常データの場合、対数や差分を取って定常化（1次微分の場合）
@@ -144,7 +156,12 @@ tsdiag(fit,gof.lag=12)	#関数tsdiag：ARIMAモデルを診断(残差分析)す�
 
 ##fracdiff(x, nar = 0,dtol = NULL,nma = 0, ...)	#xは時系列データ、narは自己回帰の次数p、dtolは差分の階数d、nmaは移動平均の次数q
 
+
+
 library(fracdiff)
+
+
+
 (AP.d<-fdGPH(AirPassengers)$d)	#データAirPassengersを用いて、差分階数を推定
 AP.fra<-fracdiff(AirPassengers,nar=3, dtol= AP.d,nma=1)
 summary(AP.fra)	#最大対数尤度は$log.likelihood、自己回帰係数は$ar、移動平均係数は$ma
@@ -156,7 +173,12 @@ summary(AP.fra)	#最大対数尤度は$log.likelihood、自己回帰係数は$ar
 条件付き分散の非対称性を表す、TGARCH(Threshold G ARCH) 
 GARCHモデルとTGARCHモデルを統合した、APARCH(Asymmetric Power ARCH) 
 
+
+
 library(fGarch)
+
+
+
 UKg.d<-diff(UKgas)
 UKg.m <-garchFit(formula= ~ arma(1,1) + garch(1,1), data = UKg.d, trace=F)
 summary(UKg.m)
@@ -179,7 +201,12 @@ plot (stl (UKgas, s.window ="per"))
 
 #多変量時系列	#ベクトル自己回帰(VAR:VectorAutoRegressive)モデル
 
+
+
 library(tseries);data(USeconomic)
+
+
+
 USe.d<-diff(USeconomic[,1:2])
 ts.plot(USe.d,lty=c(1,2),col=c(1,2))
 legend(locator(1),c(colnames(USe.d)[1],　colnames(USe.d)[2]),lty=c(1,2),col=c(1,2))
@@ -197,8 +224,13 @@ USe.f<-predict(USe.ar,n.ahead=12,se.fit=F)
 ##多次元状態空間に埋め込む(embedding)方法
 ##リカレンスプロット(recurrence plots)法
 
+
+
 library(tseriesChaos)
 library(scatterplot3d)
+
+
+
 ro.em<-embedd(rossler.ts,m=3,d=8)
 scatterplot3d(ro.em,type="l",color=4)
 
