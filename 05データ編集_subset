@@ -4,15 +4,10 @@ data0110 <- subset(data0110, data0110$Walk<11)
 data0130 <- subset(data0130, data0130$Walk<31)
 
 #管理費をの外れ値を除去する
-
 #賃料を分割する(\100,000)
-
 #面積を分割する（100m2）
-
 #駐車場の有無で分割する
-
 #駐車料金で分割する（\10,000）
-
 #築年時を分割する（時代ごと）
 
 
@@ -28,7 +23,6 @@ abline(v=median(x), col="blue")
 #legend関数を使って凡例として代表値を表示
 legend(locator(1), legend=c(mean(x), median(x)), lwd=1, col=c("red", "blue"))
 
-
 #凡例に使用する平均値や中央値の小数点以下が細かすぎると思えば、 
 #round関数などを使って小数点第2位で丸めることで更に見やすさを強調できます。
 hist(x)
@@ -40,6 +34,7 @@ legend(locator(1), legend=repval, lwd=1, col=c("red", "blue"))
 ##他サイトでは...
 abline(v=median(A), lty=1,col=2,lwd=3)
 abline(v=mean(A), lty=1,col=4,lwd=3)
+
 
 
 #ヒストグラムに散布度を示す直線を追加
