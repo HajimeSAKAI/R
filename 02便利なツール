@@ -1,12 +1,13 @@
 #読み込み対策（エンコーディングによる違いで日本語の文字化け）
-###UTF-8(readrはこれを標準として読み込む)
-###ShiftJISのCP932(文字化けする)
 
-##エンコードの確認
+#エンコードの確認
 guess_encording("")	#"csv等のファイルの名前"
-##エンコーディングの指定して、読み込み
-read_csv("",locale=locale(encoding="CP932")	#エンコーディングを指定すると読み込める！
+    ##UTF-8(readrはこれを標準として読み込む)
+    ##ShiftJISのCP932(文字化けする)
 
+#エンコーディングの指定して、読み込み
+read_csv("",locale=locale(encoding="CP932")	#エンコーディングを指定すると読み込める！
+read_csv("",locale=locale(encoding="UTF-8")	#エンコーディングを指定すると読み込める！
 
 #実行時間の計測
 system.time(data0110<-read_csv(""))
