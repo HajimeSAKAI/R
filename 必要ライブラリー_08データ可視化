@@ -1,0 +1,21 @@
+#可視化の基本パッケージ
+library(ggplot2) ##可視化に関するパッケージ
+
+#GUIベースの分析ツール
+library(Rcmdr) #Rコマンダーは、直感的に分析するのに最適
+
+#可視化の視覚変更
+library(RColorBrewer) ##可視化の際に豊富な色を使用するためのパッケージ
+library(viridis)  ##Pythonのmatplotlibライブラリと同じ色空間を使用可能にする
+library(ggthemes) ##色覚多様性に配慮したカラーパレットの適用
+
+#GUIベースで可視化
+library(ggplotgui)  ##ggplot_shiny()でデータフレームを指定してマウス操作で可視化できる
+library(ggpubr) ##適当に調べて...（僕自身も理解してない）(cfパッケージ. gridExtra,cowplot)
+
+library(gapminder)  ##折れ線グラフ作成
+
+#回帰分析と可視化
+library(corrplot) #算出した相関係数を可視化(色彩で表現)
+library(coefplot) #相関係数の結果をグラフ化(点プロット)
+library(jtool)  ##重回帰分析の結果を視覚的に表示する
