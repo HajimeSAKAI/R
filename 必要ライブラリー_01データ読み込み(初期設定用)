@@ -1,0 +1,24 @@
+library(tools)  #パッケージ開発ツール
+
+library(devtools) #install_githubを含んだパッケージ
+##どうやって使うのか不明
+##devtools::install_github("toshi-ara/makedummies")
+
+library(tidyverse)  #パッケージを集約したパッケージ
+#library(readr)  #読み込みに関するパッケージ
+#library(ggplot2) #可視化に関するパッケージ
+#library(dplyr)  #データ整形に関するパッケージ
+#library(tidyr)  #tidy dataを作成する際に活用するパッケージ（Rにとって扱いやすくするため　）
+
+library(data.table) #tidyverseに含まれていないけれど読み込みに強いパッケージ
+library(foreign)   #Minitab,S,SAS,SPSS,Stana,Systat,dBaseなどの読み込み
+
+library(readxl) #Excelファイルの読み込み
+#read_excel(xlsx/data.xlsx, sheet=1)
+library(haven)  #SAS,SPSS,STATAファイルの読み込み
+#read_sas
+#read_sav ##SPSS
+#read_dta ##STATA
+
+
+
