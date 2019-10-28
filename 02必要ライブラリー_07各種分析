@@ -1,16 +1,54 @@
+#GUIベースの分析ツール
+library(Rcmdr) #Rコマンダーは、直感的に分析するのに最適
 
 
 #線形回帰分析
+
+#回帰等の分析に関するパッケージ
+library(corrplot) #算出した相関係数を可視化(色彩で表現)
+library(coefplot) #相関係数の結果をグラフ化(点プロット)
+library(jtool)  ##重回帰分析の結果を視覚的に表示する
+library(MASS) #多変量データ解析に使う
+library(boot) #Bootstrap関数
+library(class)  #分類関数
+library(cluster)  #クラスター分析
+library(codetools)  #Rコードの分析ツール
+
+library(stargazer)  #記述統計の表の作成ができるパッケージ
+
 
 
 #非線形回帰分析
 
 
-#時系列解析
 
+
+#時系列解析(ARIMAモデルの使用に必要?)
+#https://tjo.hatenablog.com/entry/2013/07/12/184704
+#https://logics-of-blue.com/%E6%99%82%E7%B3%BB%E5%88%97%E5%88%86%E6%9E%90_%E5%AE%9F%E8%B7%B5%E7%B7%A8/
+
+library(forecast)
 
 
 
 #その他
 
+library(compiler) #自作関数などをコンパイルするインタフェース
+library(parallel) #並列計算処理をサポート
 
+library(grid) #Gridグラフィクス
+library(kernSmooth) #カーネルスムージング関数
+library(lattice)  #グラフィックス格子
+library(mgcv) #GAMs with GCV（平滑化の推定など）
+library(nlme) #混合効果モデル
+
+library(rcompgen) #コマンドライン完成ジェネレーター
+
+library(rpart)  #帰納的な分割（決定木）
+library(spatial)  #クリギングと点配置解析関数
+library(splines)  #回帰スプライン関数と関数
+library(stats4) #S4クラスに使用される統計的関数
+library(survival) #生存分析
+library(tcltk)  #Tcl/Tkインタフェース
+
+library(psych)  ##心理学で用いられる統計処理方法のパッケージ
