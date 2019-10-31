@@ -1,0 +1,22 @@
+#分析を行う際は基本的に、左辺が料金、右辺が要因
+
+#log(e(ネイピア数))を使うことで、被説明変数への影響力を偏回帰係数の大小で説明する場合
+lm.log.data0105 <- lm(log(Rent+Management.fee+(Key.money/24))~., data=data0105)
+lm1.log.data0105 <- lm(
+log(Rent+Management.fee+(Key.money/24))~.-Structure-NSEW
+-Deposit1-Deposit2-Amortization
+-Parking,
+data=data0105
+)
+
+#ダミー変数を多用した場合
+##log(e(ネイピア数))を使うことで、被説明変数への影響力を偏回帰係数の大小で説明する場合
+lm.log.data0105_dummied <- lm(log(Rent+Management.fee+(Key.money/24))~.-Number-Structure-NSEW,
+data=data0105_dummied)
+
+summary(lm.log.data0105)
+summary(lm1.log.data0105)
+summary(lm.log.data0105)
+
+
+
