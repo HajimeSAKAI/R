@@ -1,0 +1,7 @@
+#step関数
+step(回帰オブジェクト)
+
+#AIC
+AIC(data..)
+
+##RMSEの比較	sqrt(sum(resid(回帰オブジェクト)^2)/length(resid(回帰オブジェクト)))
