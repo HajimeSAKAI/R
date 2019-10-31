@@ -11,3 +11,9 @@ read_csv("",locale=locale(encoding="UTF-8")	#エンコーディングを指定�
 
 #実行時間の計測
 system.time(data0110<-read_csv(""))
+
+
+
+#csvへの書き出し
+write.csv(head(data0105,100),"data0105.csv")
+
