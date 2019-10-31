@@ -47,12 +47,15 @@ structure<-dummy(data0105$Structure)
 nsew<-dummy(data0105$NSEW)
 
 ##ダミー変数の組み込み
-data0105_dummied<-data.frame(data0105,nsew)
-##必要なダミー変数を抜き出して使う
-###方位(南向き系統、東向き系統)
 dummied_nsew<-(data0105_dummied$NSEW1+data0105_dummied$NSEW2)
+
+#できるならば，下の東から南西までをカバーしたもので行う
+#dummied_nsew<-(data0105_dummied$NSEW1+data0105_dummied$NSEW2+data0105_dummied$NSEW3+data0105_dummied$NSEW4)
+#もしくは，東と南とで分けて分析する(既往研究では南向きが重視されていたが，東向きのほうがいいんじゃね？)
+
 data0105_dummied<-data.frame(data0105,number,structure,dummied_nsew)  #駅ダミー考慮df
 data0105_dummied<-data0105_dummied[,c(-1,-10,-13)]
+
 
 #中心地からの距離(愛知県の渥美線の場合)
 number<-data0105$Number
