@@ -1,0 +1,7 @@
+#スクレイピングパッケージ
+library(rvest)      #スクレイピングに関するパッケージ（別途読む込み必要）
+library(RSelenium)  #Seleniumuを操作するパッケージ
+
+
+#Twitter情報の収集
+library(rtweet) #twitterAPIに関するパッケージ
