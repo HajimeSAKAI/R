@@ -1,0 +1,58 @@
+data0110_area1 <-data0110
+data0110_area1 <- filter(Area <30)
+
+data0110_area2 <-data0110
+data0110_area2 <- filter(Area >=30,Area <50)
+
+data0110_area3 <-data0110
+data0110_area3 <- filter(Area >=50)
+
+data0110_01 <-data0110
+data0110_01 <- filter(Number=="1")
+data0110_02 <-data0110
+data0110_02 <- filter(Number=="2")
+data0110_03 <-data0110
+data0110_03 <- filter(Number=="3")
+data0110_04 <-data0110
+data0110_04 <- filter(Number=="4")
+data0110_05 <-data0110
+data0110_05 <- filter(Number=="5")
+data0110_06 <-data0110
+data0110_06 <- filter(Number=="6")
+data0110_07 <-data0110
+data0110_07 <- filter(Number=="7")
+data0110_08 <-data0110
+data0110_08 <- filter(Number=="8")
+data0110_09 <-data0110
+data0110_09 <- filter(Number=="9")
+data0110_10 <-data0110
+data0110_10 <- filter(Number=="10")
+data0110_11 <-data0110
+data0110_11 <- filter(Number=="11")
+data0110_12 <-data0110
+data0110_12 <- filter(Number=="12")
+data0110_13 <-data0110
+data0110_13 <- filter(Number=="13")
+data0110_14 <-data0110
+data0110_14 <- filter(Number=="14")
+data0110_15 <-data0110
+data0110_15 <- filter(Number=="15")
+data0110_16 <-data0110
+data0110_16 <- filter(Number=="16")
+
+hist(table(data0110_01))
+hist(table(data0110_02))
+hist(table(data0110_03))
+hist(table(data0110_04))
+hist(table(data0110_05))
+hist(table(data0110_06))
+hist(table(data0110_07))
+hist(table(data0110_08))
+hist(table(data0110_09))
+hist(table(data0110_10))
+hist(table(data0110_11))
+hist(table(data0110_12))
+hist(table(data0110_13))
+hist(table(data0110_14))
+hist(table(data0110_15))
+hist(table(data0110_16))
