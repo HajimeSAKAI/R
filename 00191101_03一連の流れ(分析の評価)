@@ -10,3 +10,19 @@ data0105_Management.fee+data0105_Area
 )
 sqrt(sum(resid(m1_data0105)^2)/length(resid(m1_data0105)))
 AIC(m1_data0105)
+
+m2_data0105 <- lm(data0105_Rent~
+std0105_Walk+std0105_Parking+
+data0105_Management.fee+data0105_Area)
+sqrt(sum(resid(m2_data0105)^2)/length(resid(m2_data0105)))
+AIC(m2_data0105)
+
+#両方のモデルの残差プロットを描き、視覚的に見比べてみる。
+#残差が0の方が当てはまりが良い(常識的に考えると...)
+par(mfrow = c(1, 2))
+plot(resid(m1_data0105_data0105), ylim = c(-1, 1))
+grid()
+abline(h = 0, col = 'red')
+plot(resid(m2_data0105_data0105), ylim = c(-1, 1))
+grid()
+abline(h = 0, col = 'red')
