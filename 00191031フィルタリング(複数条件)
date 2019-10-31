@@ -1,0 +1,112 @@
+data0110_01 <-data0110
+data0110_01 <- 
+filter(
+Number=="1",
+Rent >=50000,
+Rent <100000
+)
+data0110_02 <-data0110
+data0110_02 <- 
+filter(
+Number=="2",
+Rent >=50000,
+Rent <100000
+)
+data0110_03 <-data0110
+data0110_03 <- 
+filter(
+Number=="3",
+Rent >=50000,
+Rent <100000
+)
+data0110_04 <-data0110
+data0110_04 <- 
+filter(
+Number=="4",
+Rent >=50000,
+Rent <100000
+)
+data0110_05 <-data0110
+data0110_05 <- 
+filter(
+Number=="5",
+Rent >=50000,
+Rent <100000
+)
+data0110_06 <-data0110
+data0110_06 <- 
+filter(
+Number=="6",
+Rent >=50000,
+Rent <100000
+)
+data0110_07 <-data0110
+data0110_07 <- 
+filter(
+Number=="7",
+Rent >=50000,
+Rent <100000
+)
+data0110_08 <-data0110
+data0110_08 <- 
+filter(
+Number=="8",
+Rent >=50000,
+Rent <100000
+)
+data0110_09 <-data0110
+data0110_09 <- 
+filter(
+Number=="9",
+Rent >=50000,
+Rent <100000
+)
+data0110_10 <-data0110
+data0110_10 <- 
+filter(
+Number=="10",
+Rent >=50000,
+Rent <100000
+)
+data0110_11 <-data0110
+data0110_11 <- 
+filter(
+Number=="11",
+Rent >=50000,
+Rent <100000
+)
+data0110_12 <-data0110
+data0110_12 <- 
+filter(
+Number=="12",
+Rent >=50000,
+Rent <100000
+)
+data0110_13 <-data0110
+data0110_13 <- 
+filter(
+Number=="13",
+Rent >=50000,
+Rent <100000
+)
+data0110_14 <-data0110
+data0110_14 <- 
+filter(
+Number=="14",
+Rent >=50000,
+Rent <100000
+)
+data0110_15 <-data0110
+data0110_15 <- 
+filter(
+Number=="15",
+Rent >=50000,
+Rent <100000
+)
+data0110_16 <-data0110
+data0110_16 <- 
+filter(
+Number=="16",
+Rent >=50000,
+Rent <100000
+)
