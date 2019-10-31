@@ -1,1 +1,21 @@
+#分析を行う際は基本的に、左辺が料金、右辺が要因
+
+#被説明変数の説明力を直感的に理解する場合
+#ダミー変数を入れなかった場合
+
+lm.data0105 <- lm(Rent+Management.fee+(Key.money/24)~., data=data0105)
+lm1.data0105 <- lm(
+Rent+Management.fee+(Key.money/24)~.-Structure-NSEW
+-Deposit1-Deposit2-Amortization
+-Parking,
+data=data0105
+)
+#ダミー変数を多用した場合
+lm.data0105_dummied <- lm(Rent+Management.fee+(Key.money/24)~.-Number-Structure-NSEW,
+data=data0105_dummied)
+
+summary(lm.data0105)
+summary(lm1.data0105)
+summary(lm.data0105_dummied)
+
 
