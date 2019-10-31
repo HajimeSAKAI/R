@@ -1,0 +1,100 @@
+#必要となるライブラリの読み込み
+library(tidyverse)
+library(dummies)
+
+#作業フォルダの読み込み
+setwd("C:/Users/shibusawa/Documents/R/DWH")
+#データ読み込み(日時ごと)
+#出力データは，データ名で分類できるように工夫すること
+data0105 <- read.csv("190109-05.csv",header=T)
+data0205 <- read.csv("190204-05.csv",header=T)
+data0305 <- read.csv("190306-05.csv",header=T)
+data0405 <- read.csv("190405-05.csv",header=T)
+data0505 <- read.csv("190506-05.csv",header=T)
+data0110 <- read.csv("190109-10.csv",header=T)
+data0210 <- read.csv("190204-10.csv",header=T)
+data0310 <- read.csv("190306-10.csv",header=T)
+data0410 <- read.csv("190405-10.csv",header=T)
+data0510 <- read.csv("190506-10.csv",header=T)
+data0130 <- read.csv("190109-30.csv",header=T)
+data0230 <- read.csv("190204-30.csv",header=T)
+data0330 <- read.csv("190306-30.csv",header=T)
+data0430 <- read.csv("190405-30.csv",header=T)
+data0530 <- read.csv("190506-30.csv",header=T)
+#欠損値の削除
+data0105 <- na.omit(data0105)
+data0110 <- na.omit(data0110)
+data0130 <- na.omit(data0130)
+data0205 <- na.omit(data0205)
+data0210 <- na.omit(data0210)
+data0230 <- na.omit(data0230)
+data0305 <- na.omit(data0305)
+data0310 <- na.omit(data0310)
+data0330 <- na.omit(data0330)
+data0405 <- na.omit(data0405)
+data0410 <- na.omit(data0410)
+data0430 <- na.omit(data0430)
+data0505 <- na.omit(data0505)
+data0510 <- na.omit(data0510)
+data0530 <- na.omit(data0530)
+
+
+
+#必要なダミー変数をそのまま抜き出して使うことはできない。
+#一度dfに埋め込んでから抜き出すこと(検証済み)
+number<-dummy(data0105$Number)
+structure<-dummy(data0105$Structure)
+nsew<-dummy(data0105$NSEW)
+
+##ダミー変数の組み込み
+data0105_dummied<-data.frame(data0105,nsew)
+##必要なダミー変数を抜き出して使う
+###方位(南向き系統、東向き系統)
+dummied_nsew<-(data0105_dummied$NSEW1+data0105_dummied$NSEW2)
+data0105_dummied<-data.frame(data0105,number,structure,dummied_nsew)  #駅ダミー考慮df
+data0105_dummied<-data0105_dummied[,c(-1,-10,-13)]
+
+#中心地からの距離(愛知県の渥美線の場合)
+number<-data0105$Number
+number<-replace(number,which(number== 9),999999999)
+number<-replace(number,which(number==10),99999999)
+number<-replace(number,which(number==11),9999999)
+number<-replace(number,which(number==12),999999)
+number<-replace(number,which(number==13),99999)
+number<-replace(number,which(number==14),9999)
+number<-replace(number,which(number==15),999)
+number<-replace(number,which(number==16),99)
+number<-replace(number,which(number==1),111)
+number<-replace(number,which(number==2),222)
+number<-replace(number,which(number==3),333)
+number<-replace(number,which(number==4),444)
+number<-replace(number,which(number==5),555)
+number<-replace(number,which(number==6),666)
+number<-replace(number,which(number==7),777)
+number<-replace(number,which(number==8),888)
+###再変換する
+number<-replace(number,which(number==999999999),7.1)
+number<-replace(number,which(number==99999999),8.5)
+number<-replace(number,which(number==9999999),10.7)
+number<-replace(number,which(number==999999),12.7)
+number<-replace(number,which(number==99999),14)
+number<-replace(number,which(number==9999),15.6)
+number<-replace(number,which(number==999),17.1)
+number<-replace(number,which(number==99),18)
+number<-replace(number,which(number==111),0)
+number<-replace(number,which(number==222),1)
+number<-replace(number,which(number==333),1.7)
+number<-replace(number,which(number==444),2.5)
+number<-replace(number,which(number==555),3.2)
+number<-replace(number,which(number==666),4.3)
+number<-replace(number,which(number==777),5.3)
+number<-replace(number,which(number==888),6.3)
+
+walk<- data0105$Walk*80
+
+#都心部からの距離を考慮df
+data0105_dummied1<-data.frame(data0105,number,structure,dummied_nsew)
+data0105_dummied2<-data.frame(data0105,number,walk,structure,dummied_nsew)
+data0105_dummied1<-data0105_dummied1[,c(-1,-10,-13)]
+data0105_dummied2<-data0105_dummied2[,c(-1,-9,-10,-13)]
+
