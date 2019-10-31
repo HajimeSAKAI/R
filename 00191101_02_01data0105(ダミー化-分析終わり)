@@ -63,3 +63,61 @@ data0105_dummied2<-data.frame(data0105,number,walk,structure,dummied_nsew)
 data0105_dummied1<-data0105_dummied1[,c(-1,-10,-13)]
 data0105_dummied2<-data0105_dummied2[,c(-1,-9,-10,-13)]
 
+#元データ
+lm.data0105 <- lm(
+Rent+Management.fee+(Key.money/24)~.
+-Deposit1-Deposit2-Amortization-Parking,
+data=data0105
+)
+lm.log.data0105<- lm(
+log(Rent+Management.fee+(Key.money/24))~.
+-Deposit1-Deposit2-Amortization-Parking,
+data=data0105
+)
+#駅ごとダミー化
+lm.data0105_dummied <- lm(
+Rent+Management.fee+(Key.money/24)~.
+-Deposit1-Deposit2-Amortization-Parking,
+data=data0105_dummied
+)
+lm.log.data0105_dummied <- lm(
+log(Rent+Management.fee+(Key.money/24))~.
+-Deposit1-Deposit2-Amortization-Parking,
+data=data0105_dummied
+)
+#駅距離化
+lm.data0105_dummied1 <- lm(
+Rent+Management.fee+(Key.money/24)~.
+-Deposit1-Deposit2-Amortization-Parking,
+data=data0105_dummied1
+)
+lm.log.data0105_dummied1 <- lm(
+log(Rent+Management.fee+(Key.money/24))~.
+-Deposit1-Deposit2-Amortization-Parking,
+data=data0105_dummied1
+)
+#駅距離化+徒歩距離化
+lm.data0105_dummied2 <- lm(
+Rent+Management.fee+(Key.money/24)~.
+-Deposit1-Deposit2-Amortization-Parking,
+data=data0105_dummied2
+)
+lm.log.data0105_dummied2 <- lm(
+log(Rent+Management.fee+(Key.money/24))~.
+-Deposit1-Deposit2-Amortization-Parking,
+data=data0105_dummied2
+)
+#書き出し
+write.csv(summary(lm.data0105)$coef, file="lm.data0105.csv")
+write.csv(summary(lm.data0105_dummied)$coef, file="lm.data0105_dummied.csv")
+write.csv(summary(lm.data0105_dummied1)$coef, file="lm.data0105_dummied1.csv")
+write.csv(summary(lm.data0105_dummied2)$coef, file="lm.data0105_dummied2.csv")
+write.csv(summary(lm.log.data0105)$coef, file="lm.log.data0105.csv")
+write.csv(summary(lm.log.data0105_dummied)$coef, file="lm.log.data0105_dummied.csv")
+write.csv(summary(lm.log.data0105_dummied1)$coef, file="lm.log.data0105_dummied1.csv")
+write.csv(summary(lm.log.data0105_dummied2)$coef, file="lm.log.data0105_dummied2.csv")
+
+write.csv(cor(data0105), file="cor.data0105.csv")
+write.csv(cor(data0105_dummied), file="cor.data0105_dummied.csv")
+write.csv(cor(data0105_dummied1), file="cor.data0105_dummied1.csv")
+write.csv(cor(data0105_dummied2), file="cor.data0105_dummied2.csv")
