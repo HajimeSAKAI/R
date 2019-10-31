@@ -1,0 +1,12 @@
+#回帰モデルの評価（2つのモデルを作成して、両者の適合の良さを比較してみる）
+##RMSEの比較	sqrt(sum(resid(回帰モデル)^2)/length(resid(回帰モデル)))
+##AICの比較	AIC(回帰モデル)
+##AICの方が説明力が強い?(多分...)
+
+m1_data0105 <- lm(data0105_Rent~ 
+std0105_Walk+std0105_Parking+std0105_Number+
+data0105_NSEW+data0105_Structure+
+data0105_Management.fee+data0105_Area
+)
+sqrt(sum(resid(m1_data0105)^2)/length(resid(m1_data0105)))
+AIC(m1_data0105)
