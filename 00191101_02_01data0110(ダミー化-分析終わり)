@@ -1,0 +1,108 @@
+number<-dummy(data0110$Number)
+structure<-dummy(data0110$Structure)
+nsew<-dummy(data0110$NSEW)
+
+data0110_dummied<-data.frame(data0110,nsew)
+
+dummied_nsew<-(data0110_dummied$NSEW1+data0110_dummied$NSEW2)
+data0110_dummied<-data.frame(data0110,number,structure,dummied_nsew)
+data0110_dummied<-data0110_dummied[,c(-1,-10,-13)]
+
+number<-data0110$Number
+number<-replace(number,which(number== 9),999999999)
+number<-replace(number,which(number==10),99999999)
+number<-replace(number,which(number==11),9999999)
+number<-replace(number,which(number==12),999999)
+number<-replace(number,which(number==13),99999)
+number<-replace(number,which(number==14),9999)
+number<-replace(number,which(number==15),999)
+number<-replace(number,which(number==16),99)
+number<-replace(number,which(number==1),111)
+number<-replace(number,which(number==2),222)
+number<-replace(number,which(number==3),333)
+number<-replace(number,which(number==4),444)
+number<-replace(number,which(number==5),555)
+number<-replace(number,which(number==6),666)
+number<-replace(number,which(number==7),777)
+number<-replace(number,which(number==8),888)
+number<-replace(number,which(number==999999999),7.1)
+number<-replace(number,which(number==99999999),8.5)
+number<-replace(number,which(number==9999999),10.7)
+number<-replace(number,which(number==999999),12.7)
+number<-replace(number,which(number==99999),14)
+number<-replace(number,which(number==9999),15.6)
+number<-replace(number,which(number==999),17.1)
+number<-replace(number,which(number==99),18)
+number<-replace(number,which(number==111),0)
+number<-replace(number,which(number==222),1)
+number<-replace(number,which(number==333),1.7)
+number<-replace(number,which(number==444),2.5)
+number<-replace(number,which(number==555),3.2)
+number<-replace(number,which(number==666),4.3)
+number<-replace(number,which(number==777),5.3)
+number<-replace(number,which(number==888),6.3)
+walk<- data0110$Walk*80
+#都心部からの距離を考慮df
+data0110_dummied1<-data.frame(data0110,number,structure,dummied_nsew)
+data0110_dummied2<-data.frame(data0110,number,walk,structure,dummied_nsew)
+data0110_dummied1<-data0110_dummied1[,c(-1,-10,-13)]
+data0110_dummied2<-data0110_dummied2[,c(-1,-9,-10,-13)]
+
+#元データ
+lm.data0110 <- lm(
+Rent+Management.fee+(Key.money/24)~.
+-Deposit1-Deposit2-Amortization-Parking,
+data=data0110
+)
+lm.log.data0110<- lm(
+log(Rent+Management.fee+(Key.money/24))~.
+-Deposit1-Deposit2-Amortization-Parking,
+data=data0110
+)
+#駅ごとダミー化
+lm.data0110_dummied <- lm(
+Rent+Management.fee+(Key.money/24)~.
+-Deposit1-Deposit2-Amortization-Parking,
+data=data0110_dummied
+)
+lm.log.data0110_dummied <- lm(
+log(Rent+Management.fee+(Key.money/24))~.
+-Deposit1-Deposit2-Amortization-Parking,
+data=data0110_dummied
+)
+#駅距離化
+lm.data0110_dummied1 <- lm(
+Rent+Management.fee+(Key.money/24)~.
+-Deposit1-Deposit2-Amortization-Parking,
+data=data0110_dummied1
+)
+lm.log.data0110_dummied1 <- lm(
+log(Rent+Management.fee+(Key.money/24))~.
+-Deposit1-Deposit2-Amortization-Parking,
+data=data0110_dummied1
+)
+#駅距離化+徒歩距離化
+lm.data0110_dummied2 <- lm(
+Rent+Management.fee+(Key.money/24)~.
+-Deposit1-Deposit2-Amortization-Parking,
+data=data0110_dummied2
+)
+lm.log.data0110_dummied2 <- lm(
+log(Rent+Management.fee+(Key.money/24))~.
+-Deposit1-Deposit2-Amortization-Parking,
+data=data0110_dummied2
+)
+
+write.csv(summary(lm.data0110)$coef, file="lm.data0110.csv")
+write.csv(summary(lm.data0110_dummied)$coef, file="lm.data0110_dummied.csv")
+write.csv(summary(lm.data0110_dummied1)$coef, file="lm.data0110_dummied1.csv")
+write.csv(summary(lm.data0110_dummied2)$coef, file="lm.data0110_dummied2.csv")
+write.csv(summary(lm.log.data0110)$coef, file="lm.log.data0110.csv")
+write.csv(summary(lm.log.data0110_dummied)$coef, file="lm.log.data0110_dummied.csv")
+write.csv(summary(lm.log.data0110_dummied1)$coef, file="lm.log.data0110_dummied1.csv")
+write.csv(summary(lm.log.data0110_dummied2)$coef, file="lm.log.data0110_dummied2.csv")
+
+write.csv(cor(data0110), file="cor.data0110.csv")
+write.csv(cor(data0110_dummied), file="cor.data0110_dummied.csv")
+write.csv(cor(data0110_dummied1), file="cor.data0110_dummied1.csv")
+write.csv(cor(data0110_dummied2), file="cor.data0110_dummied2.csv")
