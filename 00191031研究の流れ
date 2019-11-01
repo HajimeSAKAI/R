@@ -2,7 +2,7 @@
 library(tidyverse)	#データ整形等で活躍する必須ライブラリ
 
 #文字化け防止のために、読み込むデータの構造の確認
-guess()
+guess_encording()
 
 #データの読み込み
 read.csv()	#ファイルによって適宜変更
