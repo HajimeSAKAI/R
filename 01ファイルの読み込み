@@ -1,0 +1,22 @@
+###@2020/01/25，ぶん殴りたい，このエラー
+#基本的には，この方法で大丈夫
+data1230 <- read.csv("1912_30.csv", #読み込むファイル名
+header=T  #列名の有無を指定
+) #その他の読み込みの場合は結構面倒な場合があるので注意が必要！
+
+#エラーが出る場合について
+data1230 <- read.csv("1912-30.csv",header=T)
+"Error in make.names(col.names, unique = TRUE) : "
+"invalid multibyte string at '<ef>ｻ<bf>Number'"
+
+#エンコーディングを指定すれば，殆どの場合解決するけど...
+data1230 <- read.csv("1912_30.csv",header=T,fileEncoding="utf-8")
+"Warning messages:"
+"1: In read.table(file = file, header = header, sep = sep, quote = quote,  :"
+"  invalid input found on input connection '1912_30.csv'"
+"2: In read.table(file = file, header = header, sep = sep, quote = quote,  :"
+"  incomplete final line found by readTableHeader on '1912_30.csv'"
+
+#自分で弄れるファイル（Excel等で拡張子を変更できる場合）ならば，「csv（カンマ区切り）」に出力しよう
+data1230 <- read.csv("1912_30.csv",header=T)  #そうすると，エラーを吐かない！
+
