@@ -1,2 +1,0 @@
-#Twitter情報の収集
-library(rtweet) #twitterAPIに関するパッケージ
