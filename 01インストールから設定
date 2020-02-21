@@ -2,7 +2,5 @@
 #Rstudioをインストールする
   #Rをインストールしないと悪い状況になるので注意
 
-install.package("tidyverse")
-library(tidyverse)
 
 
